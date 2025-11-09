@@ -5,14 +5,19 @@ import Profile from './Profile.jsx';
 import History from './History.jsx';
 import Projects from './Projects.jsx';
 import Contact from './Contact.jsx';
-import Dday from './Dday.jsx';
 
 function App() {
   return (
     <div className="app-container">
       <header className="app-header">
         <div className="header-content">
-          <h1 className="portfolio-title">Portfolio</h1>
+          <div className="branding">
+            <p className="eyebrow">끈기 있는 프론트엔드 개발자</p>
+            <h1 className="portfolio-title">김가영 Portfolio</h1>
+            <p className="portfolio-subtitle">
+              사용자가 체험할 수 있는 웹을 구현하기 위해 문제를 끝까지 파고듭니다.
+            </p>
+          </div>
           <nav className="main-nav">
             <NavLink to="/">홈</NavLink>
             <NavLink to="/profile">프로필</NavLink>
@@ -20,9 +25,6 @@ function App() {
             <NavLink to="/projects">프로젝트</NavLink>
             <NavLink to="/contact">컨택트</NavLink>
           </nav>
-          <div className="header-extra">
-            <Dday />
-          </div>
         </div>
       </header>
       <main className="main-content">
