@@ -1,12 +1,13 @@
 :root {
   --primary-bg: #FF5B1C;
-  --surface: #EFF0F1;
-  --ink: #000000;
-  --accent: #03029B;
-  --muted: rgba(0, 0, 0, 0.7);
+  --content-bg: #EFF0F1;
+  --border-color: #d8dadf;
+  --text-primary: #000000;
+  --text-secondary: rgba(0, 0, 0, 0.7);
+  --text-accent: #03029B;
 
   --font-sans: 'Pretendard Variable', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --line-height: 1.7;
+  --line-height: 1.65;
 }
 
 *,
@@ -18,34 +19,34 @@
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background-color: var(--primary-bg);
-  color: var(--ink);
+  background-color: #000000; // 스플래시 화면 배경색과 동일하게 검정
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin: 0;
+  margin: 0 0 1rem 0;
   font-weight: 700;
   line-height: 1.3;
 }
 
 p {
-  margin: 0;
+  margin: 0 0 1.25rem 0;
   line-height: var(--line-height);
 }
 
 a {
-  color: inherit;
+  color: var(--text-accent);
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
 }
 
 a:hover {
-  color: var(--accent);
+  color: #010063;
 }

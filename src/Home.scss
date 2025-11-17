@@ -1,0 +1,196 @@
+.home-section {
+  width: 100%;
+  height: 100vh;
+  background-color: #FF5912;
+  padding: 0;
+  position: relative;
+}
+
+.canvas-container {
+  width: 100%; // 조절 가능: Canvas 컨테이너 크기 (기본값 60%)
+  height: 100%; // 조절 가능: Canvas 컨테이너 높이 (기본값 60vh)
+  margin: 0 auto; // 중앙 정렬
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background: transparent; // 배경 투명 - 홈 레이아웃이 보이도록
+}
+
+// 배경 레이아웃 (3D 오브젝트 뒤)
+.home-layout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none; // 3D 오브젝트와의 상호작용 방지
+}
+
+// 헤더
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 3rem;
+  position: relative;
+}
+
+.home-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #141684;
+  text-transform: uppercase;
+}
+
+.home-menu {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #141684;
+}
+
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 20px;
+  
+  span {
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+  }
+}
+
+// 수평선
+.home-line {
+  width: 100%;
+  height: 1px;
+  background-color: #000000;
+  position: relative;
+}
+
+.top-line {
+  margin-top: 1rem;
+}
+
+.middle-line {
+  margin-top: 4rem;
+}
+
+.bottom-line {
+  margin-top: auto;
+  margin-bottom: 2rem;
+}
+
+// 수직선 패턴
+.home-vertical-pattern {
+  position: absolute;
+  height: 40px;
+  background: repeating-linear-gradient(
+    to right,
+    #000000 0px,
+    #000000 2px,
+    transparent 2px,
+    transparent 4px
+  );
+}
+
+.top-pattern {
+  top: 5rem;
+  right: 0;
+  width: calc(100% - 20rem);
+}
+
+.middle-pattern {
+  top: 18rem;
+  right: 0;
+  width: calc(100% - 30rem);
+}
+
+.bottom-pattern {
+  bottom: 4rem;
+  left: 0;
+  width: calc(100% - 25rem);
+}
+
+// 메인 콘텐츠
+.home-main {
+  padding: 2rem 3rem;
+  margin-top: 2rem;
+}
+
+.home-web-developer {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 2px #141684;
+    transition: all 0.3s ease;
+  }
+  
+  .solid-text {
+    color: #141684;
+    transition: all 0.3s ease;
+  }
+  
+  &:hover {
+    .outline-text {
+      -webkit-text-stroke: 2px #FF0000;
+    }
+    
+    .solid-text {
+      color: #FF0000;
+    }
+  }
+}
+
+.home-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 3rem;
+  margin-top: 4rem;
+}
+
+.home-relentless {
+  font-size: 2rem;
+  font-weight: 400;
+  color: #141684;
+  text-transform: capitalize;
+}
+
+.home-interactive {
+  font-size: 2rem;
+  font-weight: 400;
+  color: #141684;
+  text-transform: capitalize;
+  margin-left: auto;
+}
+
+.home-front-end {
+  font-size: 2rem;
+  font-weight: 400;
+  padding: 0 3rem 2rem;
+  text-transform: capitalize;
+  
+  .solid-text {
+    color: #141684;
+  }
+  
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 2px #141684;
+  }
+}
+
