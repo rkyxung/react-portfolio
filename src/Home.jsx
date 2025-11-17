@@ -92,11 +92,16 @@ function LetterModel({ modelPath, position, scale = 1, index = 0, isHovered = fa
         scene.traverse((child) => {
           if (child.isMesh) {
             meshCount++;
-            // 기존 재질을 완전히 새로 만들어서 교체 (원본 재질의 어두운 속성 제거)
-            const newMaterial = new THREE.MeshStandardMaterial({ 
+            // 기존 재질을 완전히 새로 만들어서 교체 (유리 느낌의 투명 메테리얼)
+            const newMaterial = new THREE.MeshPhysicalMaterial({ 
               color: targetColor,
-              metalness: 0.5, // 조절 가능: 메탈 느낌 (0~1, 높을수록 금속 느낌)
-              roughness: 0.2 // 조절 가능: 거칠기 (0~1, 낮을수록 반사가 강함)
+              metalness: 0.3, // 조절 가능: 메탈 느낌 (0~1, 낮을수록 유리 느낌, 높을수록 금속 느낌)
+              roughness: 0.05, // 조절 가능: 거칠기 (0~1, 낮을수록 반사가 강함, 유리 느낌)
+              transmission: 0.3, // 조절 가능: 투과도 (0~1, 높을수록 투명, 유리 느낌)
+              opacity: 0.95, // 조절 가능: 불투명도 (0~1, 낮을수록 투명)
+              transparent: true, // 투명도 활성화
+              clearcoat: 1.0, // 조절 가능: 클리어코트 (0~1, 높을수록 유리 표면 느낌)
+              clearcoatRoughness: 0.05 // 조절 가능: 클리어코트 거칠기 (0~1, 낮을수록 반짝임)
             });
             
             if (Array.isArray(child.material)) {
@@ -143,9 +148,17 @@ function LetterModel({ modelPath, position, scale = 1, index = 0, isHovered = fa
     };
   }, [isHovered, rotationDirection, hoverOrder]);
 
-  // y축 회전 애니메이션 (커서 방향에 따라 좌우 회전) + X축 회전 (위아래 호버) + 2D 기울임
+  // y축 회전 애니메이션 (커서 방향에 따라 좌우 회전) + X축 회전 (위아래 호버) + 2D 기울임 + 떠있는 애니메이션
   useFrame((state, delta) => {
     if (groupRef.current) {
+      // 떠있는 애니메이션 (위아래 부드러운 움직임)
+      // 조절 가능: 떠있는 속도 (기본값 0.5, 높을수록 빠름)
+      const FLOAT_SPEED = 0.8;
+      // 조절 가능: 떠있는 범위 (기본값 0.1, 높을수록 더 많이 움직임)
+      const FLOAT_AMOUNT = 0.1;
+      const floatY = Math.sin(state.clock.elapsedTime * FLOAT_SPEED) * FLOAT_AMOUNT;
+      groupRef.current.position.y = position[1] + floatY;
+      
       // 2D 기울임 적용 (고정 각도)
       groupRef.current.rotation.z = tiltAngle; // 조절 가능: 기울임 각도 (라디안, 예: 0.2 = 약 11도)
       
