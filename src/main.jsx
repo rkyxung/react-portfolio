@@ -2,14 +2,13 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { BrowserRouter } from 'react-router-dom'; // 라우터를 사용하기 위해 추가
+import { HashRouter } from 'react-router-dom'; // HashRouter로 변경
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter basename="/react-portfolio/"> 
-      {/* 라우터로 앱을 감싸기 */}
-      {/* basename에 Repository 경로를 추가 */}
+    <HashRouter> 
+      {/* HashRouter 사용 - #profile, #projects 등 해시 라우팅 */}
       <App />
-    </BrowserRouter>
+    </HashRouter>
   </StrictMode>,
 )

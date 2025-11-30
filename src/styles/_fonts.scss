@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
+
+// Pretendard CDN weights
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2')
+    format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2')
+    format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2')
+    format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2')
+    format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2')
+    format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2')
+    format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2')
+    format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2')
+    format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2')
+    format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Local Silk Serif variations from public/fonts
+@font-face {
+  font-family: 'SilkSerif';
+  src: url('/fonts/SilkSerif-TRIAL-SemiBold-BF6740066dc0446.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SilkSerif';
+  src: url('/fonts/SilkSerif-TRIAL-Bold-BF6740066e7ab50.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Unbounded 믹스인
+@mixin unbounded-regular {
+  font-family: 'Unbounded', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@mixin unbounded-medium {
+  font-family: 'Unbounded', system-ui, -apple-system, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@mixin unbounded-semibold {
+  font-family: 'Unbounded', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@mixin unbounded-bold {
+  font-family: 'Unbounded', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@mixin unbounded-extrabold {
+  font-family: 'Unbounded', system-ui, -apple-system, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+// Pretendard 믹스인
+@mixin pretendard-thin {
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+@mixin pretendard-extralight {
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+@mixin pretendard-light {
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+@mixin pretendard-regular {
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@mixin pretendard-medium {
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@mixin pretendard-semibold {
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@mixin pretendard-bold {
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@mixin pretendard-extrabold {
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+@mixin pretendard-black {
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+@mixin silk-serif-semibold {
+  font-family: 'SilkSerif', serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@mixin silk-serif-bold {
+  font-family: 'SilkSerif', serif;
+  font-weight: 700;
+  font-style: normal;
+}
+

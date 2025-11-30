@@ -1,0 +1,221 @@
+@use './fonts' as *;
+
+// 바가 회전하고 사라지는 애니메이션
+@keyframes barRotateAndDisappear {
+  0% {
+    transform: translate(-50%, -50%) rotate(-25.4433deg) scaleY(1);
+    opacity: 1;
+  }
+  66.7% { // 0.3s / 0.45s = 66.7% - 회전 완료 (더 느리게)
+    transform: translate(-50%, -50%) rotate(-90deg) scaleY(1);
+    opacity: 1;
+  }
+  100% { // 0.3s + 0.15s = 0.45s - "팍!" 하며 압축되며 사라짐
+    transform: translate(-50%, -50%) rotate(-90deg) scaleY(0);
+    opacity: 0;
+  }
+}
+
+// 바가 일직선에서 사선으로 회전하며 작아졌다가 커지는 애니메이션
+@keyframes barRotateAndScale {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg) scale(1); // 일직선에서 시작
+    opacity: 1; // 딱! 나타남 (페이드인 없이)
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(-25.4433deg) scale(0.8); // 사선으로 회전하며 작아짐
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(-25.4433deg) scale(1); // 사선으로 커짐
+    opacity: 1;
+  }
+}
+
+.zero-hero {
+  position: absolute;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  cursor: pointer;
+  user-select: none;
+
+  .zero-container {
+    position: relative;
+    // zero-text 크기에 맞춰서 정확히 중앙 정렬
+    width: 41vw;
+    height: 41vw; // 정사각형으로 만들어서 정확한 중앙 정렬1
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .zero-text {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 42vw;
+    font-weight: 400;
+    line-height: 1;
+    color: #FF5912;
+    // 정확한 중앙 정렬을 위해
+    display: block;
+    text-align: center;
+    transition: font-weight 0.3s ease-out;
+
+    &.bold {
+      @include unbounded-bold;
+    }
+  }
+
+  .zero-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // 정확히 중앙(50%)에서 잘라서 왼쪽 반만 보이게
+    // 약간의 오프셋으로 정확한 중앙 맞춤
+    clip-path: polygon(0 0, calc(50% + 0.1px) 0, calc(50% + 0.1px) 100%, 0 100%);
+    transition: transform 0.25s ease-out;
+  }
+
+  .zero-right {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // 정확히 중앙(50%)에서 잘라서 오른쪽 반만 보이게
+    // 약간의 오프셋으로 정확한 중앙 맞춤
+    clip-path: polygon(calc(50% - 0.1px) 0, 100% 0, 100% 100%, calc(50% - 0.1px) 100%);
+    transition: transform 0.25s ease-out;
+  }
+
+  // 기본 상태 - 완전히 합쳐진 상태
+  &.default {
+    .zero-left {
+      transform: translateX(0);
+    }
+    .zero-right {
+      transform: translateX(0);
+    }
+    .diagonal-bar {
+      // 기본 상태: 사선으로 회전
+      transform: translate(-50%, -50%) rotate(-25.4433deg) scaleY(1);
+      opacity: 1;
+      visibility: visible; // 보이게
+      animation: none; // animation 리셋
+    }
+  }
+
+  // 호버 상태 - 단계별 애니메이션
+  &.hover {
+    // 1단계: 바가 먼저 세로 일자로 회전 (0.2초) - 이때는 보임
+    // 2단계: 바가 "팍!" 하며 사라지면서 원이 갈라짐 (0.2초 딜레이 후, 매우 빠르게)
+    .diagonal-bar {
+      // animation으로 순차적 효과 구현
+      // 회전은 더 느리게 (0.3초), 압축은 "팍!" 하게 (0.15초)
+      animation: barRotateAndDisappear 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    .zero-left {
+      // 바의 두께(9vh)의 절반만큼 왼쪽으로 이동
+      transform: translateX(calc(-9vh / 2));
+      transition: transform 0.12s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.2s; // "팍!" 하며 갈라짐
+    }
+    .zero-right {
+      // 바의 두께(9vh)의 절반만큼 오른쪽으로 이동
+      transform: translateX(calc(9vh / 2));
+      transition: transform 0.12s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.2s; // "팍!" 하며 갈라짐
+    }
+  }
+
+  // 열림 상태 (동적 간격 적용)
+  &.open {
+    .zero-left {
+      transform: translateX(calc(var(--gap, 2vw) * -1));
+      transition: transform 0.3s ease-out; // 더 빠르게 (0.5s -> 0.3s)
+    }
+    .zero-right {
+      transform: translateX(var(--gap, 2vw));
+      transition: transform 0.3s ease-out; // 더 빠르게 (0.5s -> 0.3s)
+    }
+    .diagonal-bar {
+      transform: translate(-50%, -50%) rotate(-90deg);
+      opacity: 0; // 완전히 사라짐
+      visibility: hidden; // display 대신 visibility 사용 (애니메이션을 위해)
+      transition: transform 0.3s ease-out, opacity 0.1s ease-out;
+    }
+  }
+
+  // 닫힘 상태
+  &.closing {
+    .zero-left {
+      transform: translateX(0);
+      transition: transform 0.4s ease-out; // 더 빠르게 (0.8s -> 0.4s)
+    }
+    .zero-right {
+      transform: translateX(0);
+      transition: transform 0.4s ease-out; // 더 빠르게 (0.8s -> 0.4s)
+    }
+    .diagonal-bar {
+      // 일직선으로 먼저 보이고, 원이 합쳐진 후에 사선으로 회전
+      opacity: 0; // 처음에는 안보임
+      visibility: visible;
+      // 일직선(-90deg)으로 먼저 보이고, 원이 합쳐진 후(0.8s 딜레이) 사선으로 회전
+      transform: translate(-50%, -50%) rotate(-90deg) scale(1); // 일직선으로 보이기
+      transition: transform 0.1s ease-out; // opacity transition 제거 (딱! 나타나게)
+      // 원이 합쳐진 후에 사선으로 회전하는 애니메이션 (opacity도 포함)
+      animation: barRotateAndScale 0.1s ease-out 0.8s forwards; // 0.8s 딜레이 후 시작
+    }
+  }
+
+  // 사선(바)
+  .diagonal-bar {
+    position: absolute;
+    // zero-container의 정확한 중앙에 위치
+    top: 50%;
+    left: 50%;
+    width: 33vw;
+    height: 9vh;
+    background-color: #FF5912;
+    // 회전 중심점을 정확히 중앙으로
+    transform-origin: center center;
+    // 기본 transform: 기본 상태에서 사선으로 회전, scaleY는 1로 유지
+    transform: translate(-50%, -50%) rotate(-25.4433deg) scaleY(1);
+    opacity: 1;
+    transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+    z-index: 1;
+  }
+
+  // 타이핑 단어
+  .typing-word {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Unbounded', sans-serif;
+    font-size: 6.25vw;
+    font-weight: 800;
+    color: #FF5912;
+    z-index: 2;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+    // 패딩 추가
+    padding: 0 2vw;
+  }
+
+  // 닫힘 시 글자 페이드아웃
+  &.closing .typing-word {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(0.93vh);
+  }
+}
+

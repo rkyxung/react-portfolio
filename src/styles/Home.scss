@@ -1,0 +1,350 @@
+@use './fonts' as *;
+
+.main {
+  width: 100vw;
+  height: auto; // 자식 요소들의 높이에 맞춤
+  min-height: 200vh; // hero(100vh) + about(100vh) 최소 높이 보장
+  overflow-x: hidden;
+  background-color: #191718;
+  padding: 0;    
+
+
+  .hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+
+
+    .top-wrapper {
+      position: absolute;
+      top: 8.7vh;
+      left: 0;
+      width: 100%;
+      height: 20%;
+      display: flex;
+
+      .web-developer {
+        display: flex;
+        align-items: center;
+        gap: 1.3vw;
+        font-size: 6.25vw;
+        padding: 0 2vw;
+        border: 0.1vw solid #FF5912;
+        border-left: none;
+        border-right: none;
+
+
+        .web-wrapper {
+          display: grid;
+          grid-template-areas: 'stack';
+          position: relative;
+          align-items: center;
+          margin-top: 2.7vh;
+
+          p {
+            grid-area: stack;
+            margin: 0;
+            @include silk-serif-semibold;
+          }
+
+          p:nth-child(1) {
+            -webkit-text-stroke: 0.05vw #FF5912;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 0.05vw;
+            -webkit-text-stroke-color: #FF5912;
+          }
+
+          p:nth-child(2) {
+            -webkit-text-stroke: 0.05vw #141684;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 0.05vw;
+            -webkit-text-stroke-color: #141684;
+            margin: 0.5vh 0 0 0.4vw;
+
+          }
+
+          p:nth-child(3) {
+            -webkit-text-stroke: 0.04vw rgba(229, 226, 226, 0.7);
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 0.04vw;
+            -webkit-text-stroke-color: rgba(229, 226, 226, 0.7);
+            margin: -0.5vh 0 0 -0.4vw;
+          }
+        }
+
+        .developer {
+          display: flex;
+          align-items: center;
+          color: #FF5912;
+          @include unbounded-bold;
+          font-size: 6.25vw;
+        }
+      }
+
+      .lines {
+        width: 40%;
+        height: 100%;
+        border: 0.1vw solid #FF5912;
+        border-right: none;
+        position: relative;
+        z-index: 3;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0;
+
+        .lines__bar {
+          height: 100%;
+          background-color: rgba(255, 89, 18, 0);
+          border-right: 0.1vw solid #FF5912;
+          transition: background-color 0.2s ease 0.7s; // 호버 해제 시 1.5초 지연 후 0.5초에 걸쳐 사라짐
+
+          &:last-child {
+            border-right: none;
+          }
+
+          &:hover {
+            background-color: rgba(255, 89, 18, var(--opacity, 1));
+            transition: background-color 0.1s ease 0s; // 호버 시 즉시 나타남
+          }
+
+          &[data-opacity="1.0"] {
+            --opacity: 1.0;
+          }
+          &[data-opacity="0.8"] {
+            --opacity: 0.8;
+          }
+          &[data-opacity="0.6"] {
+            --opacity: 0.6;
+          }
+          &[data-opacity="0.4"] {
+            --opacity: 0.4;
+          }
+          &[data-opacity="0.2"] {
+            --opacity: 0.2;
+          }
+          &[data-opacity="0"] {
+            --opacity: 0;
+          }
+        }
+      }
+    }
+
+    .bottom-wrapper {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 20%;
+      display: flex;
+      align-items: stretch;
+
+      .lines {
+        flex: 1;
+        height: 100%;
+        border: 0.1vw solid #FF5912;
+        border-left: none;
+        position: relative;
+        z-index: 3;
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 0;
+
+        .lines__bar {
+          height: 100%;
+          background-color: rgba(255, 89, 18, 0);
+          border-right: 0.1vw solid #FF5912;
+          transition: background-color 0.2s ease 0.7s; // 호버 해제 시 1.5초 지연 후 0.5초에 걸쳐 사라짐
+
+          &:last-child {
+            border-right: none;
+          }
+
+          &:hover {
+            background-color: rgba(255, 89, 18, var(--opacity, 1));
+            transition: background-color 0.1s ease 0s; // 호버 시 즉시 나타남
+          }
+
+          &[data-opacity="1.0"] {
+            --opacity: 1.0;
+          }
+          &[data-opacity="0.875"] {
+            --opacity: 0.875;
+          }
+          &[data-opacity="0.75"] {
+            --opacity: 0.75;
+          }
+          &[data-opacity="0.625"] {
+            --opacity: 0.625;
+          }
+          &[data-opacity="0.5"] {
+            --opacity: 0.5;
+          }
+          &[data-opacity="0.375"] {
+            --opacity: 0.375;
+          }
+          &[data-opacity="0.25"] {
+            --opacity: 0.25;
+          }
+          &[data-opacity="0.125"] {
+            --opacity: 0.125;
+          }
+          &[data-opacity="0"] {
+            --opacity: 0;
+          }
+        }
+      }
+
+      .front-end {
+        display: flex;
+        align-items: center;
+        gap: 1.3vw;
+        font-size: 6.25vw;
+        padding: 0 1.2vw 0 2vw;
+        border: 0.1vw solid #FF5912;
+        border-right: none;
+
+        .front {
+          display: flex;
+          align-items: flex-end;
+          color: #FF5912;
+          @include unbounded-bold;
+          font-size: 6.25vw;
+        }
+
+        .dash {
+          display: flex;
+          align-items: center;
+          color: #FF5912;
+          @include unbounded-bold;
+          font-size: 6.25vw;
+        }
+
+        .end-wrapper {
+          display: grid;
+          grid-template-areas: 'stack';
+          position: relative;
+          margin-top: 2.7vh;
+
+          p {
+            grid-area: stack;
+            margin: 0;
+            @include silk-serif-semibold;
+          }
+
+          p:nth-child(1) {
+            -webkit-text-stroke: 0.05vw #FF5912;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 0.05vw;
+            -webkit-text-stroke-color: #FF5912;
+          }
+
+          p:nth-child(2) {
+            -webkit-text-stroke: 0.05vw #141684;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 0.05vw;
+            -webkit-text-stroke-color: #141684;
+            margin: 0.5vh 0 0 0.4vw;
+
+          }
+
+          p:nth-child(3) {
+            -webkit-text-stroke: 0.04vw rgba(229, 226, 226, 0.7);
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 0.04vw;
+            -webkit-text-stroke-color: rgba(229, 226, 226, 0.7);
+            margin: -0.5vh 0 0 -0.4vw;
+          }
+        }
+      }
+    }
+  }
+
+  .about {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+
+    .zero-logo {
+      position: absolute;
+      top: 50%;
+      left: 46.9%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      z-index: 10; // 다른 요소 위에 표시되도록
+      // animation: fadeInZer 0.5s ease-out forwards;
+      pointer-events: none; // 클릭 이벤트 방지
+      
+      svg {
+        width: 16.25vw;
+      }
+    }
+
+    .gayoung-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      z-index: 10; // 다른 요소 위에 표시되도록
+      // animation: fadeInZer 0.5s ease-out forwards;
+      pointer-events: none; // 클릭 이벤트 방지
+
+      svg {
+        width: 42.76vw;
+      }
+    }
+
+    @keyframes fadeInZer {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .txt {
+      position: absolute;
+      font-size: 1.25vw;
+      color: #EFF0F1;
+      @include pretendard-medium;
+      letter-spacing: -0.03em;
+      padding: 0 4vw;
+      bottom: 5vh;
+
+      p {
+        margin: 0;
+        line-height: 1.7;
+        opacity: 0; // 초기 상태: 보이지 않음 (GSAP가 제어)
+      }
+    }
+
+    .about-profile-link {
+      position: absolute;
+      font-size: 1.8vw;
+      color: #EFF0F1;
+      @include unbounded-semibold;
+      letter-spacing: -0.03em;
+      padding: 0 4vw;
+      right: 0;
+      bottom: 5vh;
+      opacity: 0;
+
+      &:hover {
+        color: #FF5912;
+        transition: color 0.3s ease, transform 0.3s ease;
+        transform: translatey(-0.3vh);
+      }
+    }
+  }
+
+  .home-project {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+

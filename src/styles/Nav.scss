@@ -1,0 +1,22 @@
+@use './fonts' as *;
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1vw 0;
+  display: flex;
+  justify-content: center;
+  z-index: 9999;
+
+  .zero {
+    svg {
+      width: 6.61vw;
+    }
+  }
+}
+
+
+
+
