@@ -31,7 +31,82 @@ function Home() {
   const gayoungLogoRef = useRef(null);
   const zeroHeroRef = useRef(null);
   const txtRef = useRef(null);
-  const aboutProfileLinkRef = useRef(null);
+  const aboutProfileBtnRef = useRef(null);
+  
+  // 프로젝트 정보 상태
+  const [currentProject, setCurrentProject] = useState(0); // 0: front, 1: right, 2: back, 3: left
+  
+  // 프로젝트 정보 데이터
+  const projects = [
+    { 
+      name: 'Spikle', 
+      description: [
+        '혈당 스파이크 관리와 건강 습관 형성을 돕는 모바일 앱 \'Spikle\'을 소개하는 웹',
+        '앱의 기획 의도, 핵심 기능, 디자인 시스템, 타겟 유저 등의 정보를 사용자가 스크롤하며,',
+        '흥미롭게 탐색할 수 있도록 인터랙티브한 경험을 제공하는 데 중점을 두었습니다.'
+      ]
+    }, // Front (spikle.jpg)
+    { 
+      name: 'CLIMB ON', 
+      description: [
+        '클라이밍 입문자와 애호가들을 위한 웹 기반 정보 플랫폼',
+        '초보자 가이드를 통해 클라이밍에 필요한 준비와 기본 지식을 익힐 수 있으며,',
+        '사용자는 개인화된 로그북을 작성하고, 관심 있는 아이템을 찜(좋아요)하여 모아볼 수 있습니다.'
+      ]
+    }, // Left (climb-on.jpg)
+    { 
+      name: 'PIVOT TIME', 
+      description: [
+        '계원예술대학교 디지털미디어디자인과 2025 졸업전시 웹',
+        '전시의 주제인 \'PIVOT\'과 학생들의 열정을 시각적으로 전달하기 위해,',
+        '정적인 정보 전달을 넘어 사용자가 직접 참여하고 몰입할 수 있는 인터랙티브 웹을 구현했습니다.'
+      ]
+    }, // Back (pivot-time.jpg)
+    { 
+      name: 'CODE404:System.themepark', 
+      description: [
+        '디지털 중독을 주제로, 가상 테마파크 시스템의 오류를 복구하며 탈출하는 1인칭 방탈출 게임',
+        '플레이어는 제한 시간 내에 퍼즐을 풀어 오류를 복구하는 과정에서',
+        '디지털 중독에 대한 경각심을 얻거나 시스템에 영원히 갇히는 멀티 엔딩을 경험합니다.'
+      ]
+    }, // Right (code404.jpg)
+  ];
+  
+  // 3D 박스 회전 각도에 따라 프로젝트 정보 업데이트
+  const handleRotationChange = (rotationY) => {
+    // 각도를 0~2π 범위로 정규화
+    let angle = rotationY;
+    if (angle < 0) {
+      angle += Math.PI * 2;
+    }
+    angle = angle % (Math.PI * 2);
+    
+    // 각 면의 범위 (45도씩 여유를 두고 계산)
+    // Box Geometry Material 순서: [Right, Left, Top, Bottom, Front, Back]
+    // 실제 이미지: Right=code404, Left=climb-on, Front=spikle, Back=pivot-time
+    // 프로젝트 순서: [0: Spikle(Front), 1: CLIMB ON(Left), 2: PIVOT TIME(Back), 3: CODE404(Right)]
+    
+    let faceIndex = 0;
+    
+    // Front (spikle) - 0도 기준 ±45도
+    if (angle >= (7 * Math.PI) / 4 || angle < Math.PI / 4) {
+      faceIndex = 0; // Spikle
+    }
+    // Right (code404) - 90도 기준 ±45도
+    else if (angle >= Math.PI / 4 && angle < (3 * Math.PI) / 4) {
+      faceIndex = 3; // CODE404
+    }
+    // Back (pivot-time) - 180도 기준 ±45도
+    else if (angle >= (3 * Math.PI) / 4 && angle < (5 * Math.PI) / 4) {
+      faceIndex = 2; // PIVOT TIME
+    }
+    // Left (climb-on) - 270도 기준 ±45도
+    else if (angle >= (5 * Math.PI) / 4 && angle < (7 * Math.PI) / 4) {
+      faceIndex = 1; // CLIMB ON
+    }
+    
+    setCurrentProject(faceIndex);
+  };
 
   // 스크롤 감도 및 속도 설정
   const SCROLL_CONFIG = {
@@ -42,6 +117,19 @@ function Home() {
     aboutThreshold: 0.7,        // About 섹션 감지 임계값 (0~1)
   };
 
+
+  // 반응형 위치값 계산 함수
+  const getResponsiveValues = () => {
+    const vw = window.innerWidth / 100;
+    const vh = window.innerHeight / 100;
+    return {
+      zeroFirstX: -vw * 0.47, // -0.4vw
+      zeroSecondX: vw * 8.48, // 8.6vw
+      zeroY: window.scrollY - (vh * 4.5), // -4.5vh
+      pTagInitialY: vh * 1.85, // 1.85vh
+      logoInitialY: -vh * 0.93, // -0.93vh
+    };
+  };
 
   useEffect(() => {
     if (!heroRef.current || !aboutRef.current || !homeProjectRef.current) return;
@@ -157,11 +245,12 @@ function Home() {
             isScrollingRef.current = false;
             setIsHeroVisible(true);
             
-            // 로고들 초기 상태로 리셋
+            // 로고들 초기 상태로 리셋 - 반응형
             if (gayoungLogoRef.current) {
+              const responsiveValues = getResponsiveValues();
               gsap.set(gayoungLogoRef.current, {
                 opacity: 0,
-                yPercent: 0,
+                y: responsiveValues.logoInitialY,
                 clearProps: 'all',
               });
             }
@@ -211,9 +300,10 @@ function Home() {
     if (!txtRef.current) return;
     
     const pTags = txtRef.current.querySelectorAll('p');
+    const responsiveValues = getResponsiveValues();
     gsap.set(pTags, {
       opacity: 0,
-      y: 20,
+      y: responsiveValues.pTagInitialY,
     });
   }, []); // 마운트 시 한 번만 실행
 
@@ -221,34 +311,34 @@ function Home() {
   useEffect(() => {
     if (isHeroVisible) return; // hero 섹션에 있으면 실행 안 함
     
-    if (!zeroHeroRef.current || !gayoungLogoRef.current || !zeroLogoRef.current || !txtRef.current || !aboutProfileLinkRef.current) return;
+    if (!zeroHeroRef.current || !gayoungLogoRef.current || !zeroLogoRef.current || !txtRef.current || !aboutProfileBtnRef.current) return;
 
-    // p 태그들 초기 상태 재설정 (확실하게)
+    // p 태그들 초기 상태 재설정 (확실하게) - 반응형
     const pTags = txtRef.current.querySelectorAll('p');
+    const responsiveValues = getResponsiveValues();
     gsap.set(pTags, {
       opacity: 0,
-      y: 20, // 아래에서 시작 (원하는 값으로 조정)
+      y: responsiveValues.pTagInitialY, // 아래에서 시작 (반응형)
     });
 
     const timeline = gsap.timeline({ delay: 0.5 }); // 초기 딜레이 (원하는 값으로 조정)
 
-    // 1. 0 첫 번째 이동
+    // 1. 0 첫 번째 이동 - 반응형
     timeline.to(zeroHeroRef.current, {
-      x: - (window.innerWidth * 0.004),
-      y: window.scrollY - (window.innerHeight * 0.045),
+      x: responsiveValues.zeroFirstX,
+      y: responsiveValues.zeroY,
       duration: 1.0, // 애니메이션 시간 (원하는 값으로 조정)
       ease: 'power2.out',
     });
     
-    // 2. 가영 로고 등장 (p 태그 애니메이션과 동시에 시작)
-    // 초기 위치 설정 (아래쪽)
+    // 2. 가영 로고 등장 (p 태그 애니메이션과 동시에 시작) - 반응형
     gsap.set(gayoungLogoRef.current, {
-      yPercent: -10,
+      y: responsiveValues.logoInitialY,
       opacity: 0,
     });
     
     timeline.to(gayoungLogoRef.current, {
-      yPercent: 0,
+      y: 0,
       opacity: 1,
       duration: 0.8, // 애니메이션 시간 (원하는 값으로 조정)
       ease: 'back.out(1.7)', // 쫀득한 느낌 (값이 클수록 더 쫀득함, 원하는 값으로 조정)
@@ -261,7 +351,7 @@ function Home() {
         opacity: 1,
         duration: index === 0 ? 1.5 : 0.9, // 첫 번째는 더 길게, 나머지는 원래대로 (원하는 값으로 조정)
         ease: 'power1.out', // 더 부드러운 페이드인 (power1이 power2보다 더 부드러움)
-      }, index === 0 ? '<' : '-=0.4'); // 첫 번째는 가영 로고와 동시에, 나머지는 0.4초 간격 (원하는 값으로 조정)
+      }, index === 0 ? '+=0.2' : '-=0.4'); // 첫 번째는 가영 로고와 동시에, 나머지는 0.4초 간격 (원하는 값으로 조정)
       
       // y 이동은 쫀득하게 별도로 처리 (opacity보다 약간 빠르게)
       timeline.to(p, {
@@ -283,17 +373,17 @@ function Home() {
       ease: 'power2.in',
     }, '-=0.3'); // p 태그 애니메이션과 겹치게
 
-    // 5. 0 두 번째 이동 (p 태그 애니메이션과 겹치면서 진행)
+    // 5. 0 두 번째 이동 (p 태그 애니메이션과 겹치면서 진행) - 반응형
     timeline.to(zeroHeroRef.current, {
-      x:  (window.innerWidth * 0.086),
-      y: window.scrollY - (window.innerHeight * 0.045),
+      x: responsiveValues.zeroSecondX,
+      y: responsiveValues.zeroY,
       duration: 1.0, // 애니메이션 시간 (원하는 값으로 조정)
       ease: 'power2.out',
     }, '-=0.2'); // p 태그 애니메이션과 겹치게
 
-    // 제로 로고 초기화화
+    // 제로 로고 초기화 - 반응형
     gsap.set(zeroLogoRef.current, {
-      y: -10,
+      y: responsiveValues.logoInitialY,
       opacity: 0,
     });
 
@@ -305,13 +395,13 @@ function Home() {
       ease: 'back.out(1.7)', // 쫀득한 느낌 (값이 클수록 더 쫀득함, 원하는 값으로 조정)
     }, '-=0.3'); // p 태그 애니메이션과 겹치게
 
-    // 7. about-profile-link 페이드인 (모든 로고 애니메이션 완료 후)
-    if (aboutProfileLinkRef.current) {
-      gsap.set(aboutProfileLinkRef.current, {
+    // 7. about-profile-btn 페이드인 (모든 로고 애니메이션 완료 후)
+    if (aboutProfileBtnRef.current) {
+      gsap.set(aboutProfileBtnRef.current, {
         opacity: 0,
       });
       
-      timeline.to(aboutProfileLinkRef.current, {
+      timeline.to(aboutProfileBtnRef.current, {
         opacity: 1,
         duration: 0.8, // 애니메이션 시간 (원하는 값으로 조정)
         ease: 'power2.out',
@@ -376,14 +466,14 @@ function Home() {
         </div>
 
         <div className="txt" ref={txtRef}>
-        <p>ZERO는 제 이름 '가영'의 '영(0)'에서 시작되었습니다.</p>
+        <p>ZERO는 제 이름 '가영'의 '영(0)'에서 시작된 상징입니다.</p>
         <p>0은 비어 있지만, 동시에 얼마나 더 나아질지 모를 '미지수의 가능성'이 담겨 있습니다.</p>
         <p>그래서 저는 0을, 제 역량이 무한하게 확장될 시작점이라는 의미를 담았습니다.</p>
         </div>
 
         <div 
-          className="about-profile-link" 
-          ref={aboutProfileLinkRef}
+          className="about-profile-btn" 
+          ref={aboutProfileBtnRef}
           onClick={() => navigate('/profile')}
           style={{ cursor: 'pointer' }}
         >
@@ -394,7 +484,29 @@ function Home() {
         <ZeroHero isInteractive={isHeroVisible} ref={zeroHeroRef} />
 
         <div className="home-project" ref={homeProjectRef}>
-          <Square3D />
+          <Square3D onRotationChange={handleRotationChange} />
+
+          <div className="home-project-txt">
+            <div>{projects[currentProject].name}</div>
+            <p>
+              {Array.isArray(projects[currentProject].description) 
+                ? projects[currentProject].description.map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      {index < projects[currentProject].description.length - 1 && <br />}
+                    </span>
+                  ))
+                : projects[currentProject].description}
+            </p>
+          </div>
+
+          <div 
+            className="more-project-btn"
+            onClick={() => navigate('/projects')}
+            style={{ cursor: 'pointer' }}
+          >
+            MORE PROJECTS +
+          </div>
         </div>
 
     </section>

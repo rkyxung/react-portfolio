@@ -158,11 +158,11 @@
   &.closing {
     .zero-left {
       transform: translateX(0);
-      transition: transform 0.4s ease-out; // 더 빠르게 (0.8s -> 0.4s)
+      transition: transform 0.5s ease-out; // 살짝 느리게 (0.4s -> 0.5s)
     }
     .zero-right {
       transform: translateX(0);
-      transition: transform 0.4s ease-out; // 더 빠르게 (0.8s -> 0.4s)
+      transition: transform 0.5s ease-out; // 살짝 느리게 (0.4s -> 0.5s)
     }
     .diagonal-bar {
       // 일직선으로 먼저 보이고, 원이 합쳐진 후에 사선으로 회전
@@ -172,7 +172,7 @@
       transform: translate(-50%, -50%) rotate(-90deg) scale(1); // 일직선으로 보이기
       transition: transform 0.1s ease-out; // opacity transition 제거 (딱! 나타나게)
       // 원이 합쳐진 후에 사선으로 회전하는 애니메이션 (opacity도 포함)
-      animation: barRotateAndScale 0.1s ease-out 0.8s forwards; // 0.8s 딜레이 후 시작
+      animation: barRotateAndScale 0.2s ease-out 0.8s forwards; // 0.8s 딜레이 후 시작, 살짝 느리게 (0.1s -> 0.2s)
     }
   }
 

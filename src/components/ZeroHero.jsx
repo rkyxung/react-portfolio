@@ -9,10 +9,8 @@ const WORDS = ['GAYOUNG', 'POSSIBILITY', 'ZERO', 'POTENTIAL', 'UNKNOWN'];
 
 const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
   const [state, setState] = useState('default'); // 'default' | 'hover' | 'open' | 'closing'
-  const [currentWord, setCurrentWord] = useState('');
   const [displayedText, setDisplayedText] = useState('');
   const [lastWord, setLastWord] = useState('');
-  const [gap, setGap] = useState(2); // 괄호 간격 (vw 단위)
   const [isBold, setIsBold] = useState(false); // 폰트 굵기 상태
   const timeoutRef = useRef(null);
   const typingTimeoutRef = useRef(null);
@@ -60,7 +58,6 @@ const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             const newGap = calculateGap();
-            setGap(newGap);
             if (containerRef.current) {
               containerRef.current.style.setProperty('--gap', `${newGap}vw`);
             }
@@ -74,7 +71,6 @@ const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             const newGap = calculateGap();
-            setGap(newGap);
             if (containerRef.current) {
               containerRef.current.style.setProperty('--gap', `${newGap}vw`);
             }
@@ -112,7 +108,6 @@ const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
     if (state === 'hover' || state === 'default') {
       const word = getRandomWord();
       setLastWord(word);
-      setCurrentWord(word);
       setState('open');
       startTyping(word);
     }
@@ -121,12 +116,10 @@ const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
   // 닫힘 핸들러
   const handleClose = () => {
     setState('closing');
-    setGap(2); // 간격 리셋 (vw 단위)
     
     // 글자 페이드아웃
     setTimeout(() => {
       setDisplayedText('');
-      setCurrentWord('');
       if (containerRef.current) {
         containerRef.current.style.setProperty('--gap', '2vw');
       }
@@ -166,24 +159,21 @@ const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
     if (!aboutSection) return;
     
     // about 섹션의 끝 위치 계산 (최종 위치 - 여기서 멈춤)
-    const aboutEnd = aboutSection.offsetTop + aboutSection.offsetHeight;
+    const aboutTop = aboutSection.offsetTop;
     
     const scrollTrigger = ScrollTrigger.create({
       trigger: '.main',
       start: 'top top',
-      end: aboutEnd, // about 섹션 끝까지만 - 여기서 ScrollTrigger 완전히 종료
-      scrub: false, // 즉각적으로 반응 (애니메이션 없음)
-      invalidateOnRefresh: true, // 리사이즈 시 재계산
-      onUpdate: (self) => {
+      end: aboutTop,
+      scrub: false, 
+      invalidateOnRefresh: true,
+      onUpdate: () => {
         const scrollY = window.scrollY || window.pageYOffset;
         const windowHeight = window.innerHeight;
         
-        // about 섹션의 끝 위치를 넘어가면 즉시 종료 (더 이상 움직이지 않음)
-        // aboutEnd는 외부에서 계산된 값 사용
-        if (scrollY >= aboutEnd) {
-          // about 섹션 끝 위치에서 고정 (한 번만 설정)
+        if (scrollY >= aboutTop) {
           if (zeroHeroRef.current) {
-            const finalY = aboutEnd - (window.innerHeight * 0.04);
+            const finalY = aboutTop - (window.innerHeight * 0.04);
             const finalScale = 7.08 / 41;
             gsap.set(zeroHeroRef.current, {
               y: finalY,
@@ -191,25 +181,18 @@ const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
               immediateRender: true
             });
           }
-          return; // 여기서 완전히 종료 - 더 이상 업데이트하지 않음
+          return;
         }
         
-        // about 섹션 내에서만 실행되는 코드
-        // 스크롤 진행도 계산 (0 ~ 1)
-        // hero 섹션(100vh)을 지나면 최종 크기로
         const scrollProgress = Math.min(scrollY / windowHeight, 1);
         
-        // 초기 크기: 41vw, 최종 크기: 7.08vw
         const initialSize = 41;
         const finalSize = 7.08;
         const scale = 1 - scrollProgress * (1 - finalSize / initialSize);
         
-        // 최종 크기 비율 계산 (약 0.1727)
         const finalScaleRatio = finalSize / initialSize;
-        // 최종 크기에 가까워지면 (약 80% 이상 축소되었을 때) bold로 변경
-        const boldThreshold = finalScaleRatio + (1 - finalScaleRatio) * 0.2; // 약 0.34 정도
+        const boldThreshold = finalScaleRatio + (1 - finalScaleRatio) * 0.2;
         
-        // 폰트 굵기 업데이트
         if (scale <= boldThreshold && !isBoldRef.current) {
           isBoldRef.current = true;
           setIsBold(true);
@@ -218,17 +201,14 @@ const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
           setIsBold(false);
         }
         
-        // 스크롤 위치 및 크기 업데이트 (즉시 반영)
-        // about 섹션 내에서만 업데이트 (aboutEnd 미만일 때만)
-        if (zeroHeroRef.current && scrollY < aboutEnd) {
+        if (zeroHeroRef.current && scrollY < aboutTop) {
           gsap.set(zeroHeroRef.current, {
             y: scrollY - (window.innerHeight * 0.04),
             scale: scale,
-            immediateRender: true // 즉시 렌더링
+            immediateRender: true
           });
-        } else if (zeroHeroRef.current && scrollY >= aboutEnd) {
-          // about 섹션을 넘어가면 최종 위치에 고정
-          const finalY = aboutEnd - (window.innerHeight * 0.04);
+        } else if (zeroHeroRef.current && scrollY >= aboutTop) {
+          const finalY = aboutTop - (window.innerHeight * 0.04);
           const finalScale = 7.08 / 41;
           gsap.set(zeroHeroRef.current, {
             y: finalY,
@@ -237,10 +217,8 @@ const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
           });
         }
 
-        // 스크롤이 발생했고, 인터렉션이 진행 중이면 초기 상태로 리셋
         const scrollDelta = Math.abs(scrollY - lastScrollYRef.current);
-        if (scrollDelta > 5 && isInteractingRef.current) { // 5px 이상 스크롤 시에만 리셋
-          // 모든 타이머 정리
+        if (scrollDelta > 5 && isInteractingRef.current) { 
           if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
@@ -250,11 +228,8 @@ const ZeroHero = forwardRef(({ isInteractive = true }, ref) => {
             typingTimeoutRef.current = null;
           }
           
-          // 상태 초기화
           setState('default');
           setDisplayedText('');
-          setCurrentWord('');
-          setGap(2);
           if (containerRef.current) {
             containerRef.current.style.setProperty('--gap', '2vw');
           }

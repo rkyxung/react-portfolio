@@ -1,0 +1,110 @@
+@use './fonts' as *;
+
+.contact {
+  @include unbounded-bold;
+  width: 100dvw;
+  height: 100dvh;
+  color: #EFF0F1;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding-left: 4vw;
+  position: relative; // 중요: 물리 엔진 씬의 기준점이 됩니다
+
+  .contact-zero {
+    padding: 8vh 0 5.47vh;
+
+    svg {
+     width: 42.55vw;
+    }
+  }
+
+  .phone,
+  .email,
+  .github {
+    font-size: 2.08vw;
+    letter-spacing: -0.05em;
+    position: relative; // z-index가 먹도록 기준 설정
+    z-index: 2;         // 물리 캔버스보다 위에 오게
+
+    p {
+        margin: 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: #EFF0F1;
+    
+    &:hover {
+      color: #FF5912;
+      transition: all 0.3s ease;
+    }
+
+    }
+  }
+
+  .phone, .email {
+    margin-bottom: 5vh;
+  }
+
+  // 물리 엔진 씬 (캔버스 & 아이템 컨테이너)
+  // - 화면 전체에서 자유롭게 떨어지고 튕기도록 전체 뷰포트를 덮는 레이어
+  .physics-scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    z-index: 1; // 배경 위, 텍스트(.phone/.email/.github) 아래
+    pointer-events: auto;
+    overflow: hidden;
+
+    canvas {
+      display: block; // Matter.js 캔버스
+    }
+  }
+
+  // 떨어지는 아이템 공통 스타일
+  .physics-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    // Matter.js 바디 크기와 얼추 비슷하게 맞춤
+    width: 8vw;  
+    height: 8vw;
+    
+    // 초기 위치 (화면 밖)
+    left: -100vw; 
+    top: -100vh;
+
+
+    svg {
+      width: 7.4vw;
+    }
+
+    // 폰트 스타일 상속
+    @include unbounded-bold;
+    
+    &.orange { color: #FF5912; font-size: 7.96vw; }
+    &.white { color: #EFF0F1; font-size: 7.96vw; }
+    &.orange-border {
+      font-size: 7.96vw;
+      color: transparent;
+      -webkit-text-stroke: 0.05vw #FF5912;
+    }
+    &.white-border {
+      font-size: 7.96vw;
+      color: transparent;
+      -webkit-text-stroke: 0.05vw #EFF0F1;
+    }
+  }
+
+  .line {
+    position: absolute;
+    bottom: 7vh;
+    left: 0;
+    width: 100vw;
+    height: 0.15vw;
+    background-color: #FF5912;
+  }
+}

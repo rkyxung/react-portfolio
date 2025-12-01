@@ -11,8 +11,8 @@
 
   .hero {
     position: relative;
-    width: 100vw;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
 
 
     .top-wrapper {
@@ -39,12 +39,11 @@
           grid-template-areas: 'stack';
           position: relative;
           align-items: center;
-          margin-top: 2.7vh;
 
           p {
             grid-area: stack;
-            margin: 0;
-            @include silk-serif-semibold;
+            @include pretendard-extrabold;
+            font-size: 6.5vw;
           }
 
           p:nth-child(1) {
@@ -68,7 +67,7 @@
             -webkit-text-fill-color: transparent;
             -webkit-text-stroke-width: 0.04vw;
             -webkit-text-stroke-color: rgba(229, 226, 226, 0.7);
-            margin: -0.5vh 0 0 -0.4vw;
+            margin: -1.2vh 0 0 -0.4vw;
           }
         }
 
@@ -223,12 +222,12 @@
           display: grid;
           grid-template-areas: 'stack';
           position: relative;
-          margin-top: 2.7vh;
+          margin-right: 0.5vw;
 
           p {
             grid-area: stack;
             margin: 0;
-            @include silk-serif-semibold;
+            @include pretendard-extrabold;
           }
 
           p:nth-child(1) {
@@ -260,8 +259,8 @@
   }
 
   .about {
-    width: 100vw;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
     position: relative;
 
     .zero-logo {
@@ -319,8 +318,8 @@
       }
     }
 
-    .about-profile-link {
-      position: absolute;
+    .about-profile-btn {
+      position: absolute; 
       font-size: 1.8vw;
       color: #EFF0F1;
       @include unbounded-semibold;
@@ -332,18 +331,58 @@
 
       &:hover {
         color: #FF5912;
-        transition: color 0.3s ease, transform 0.3s ease;
-        transform: translatey(-0.3vh);
+        transition: color 0.3s ease;
       }
     }
   }
 
   .home-project {
-    width: 100vw;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
+    position: relative; // absolute 위치 요소를 위한 기준점
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .home-project-txt {
+      position: absolute;
+      left: 4vw;
+      bottom: 5vh;
+      z-index: 10;
+      color: #EFF0F1;
+      
+      div {
+        font-size: 1.8vw;
+        @include unbounded-semibold;
+        margin-bottom: 2vh;
+      }
+      
+      p {
+        font-size: 1.1vw;
+        @include pretendard-medium;
+        letter-spacing: -0.03em;
+        line-height: 1.7;
+        margin: 0;
+      }
+    }
+
+    .more-project-btn {
+      position: absolute;
+      font-size: 1.8vw;
+      color: #EFF0F1;
+      @include unbounded-semibold;
+      letter-spacing: -0.03em;
+      padding: 0 4vw;
+      right: 0;
+      bottom: 5vh;
+      z-index: 10; // 다른 요소 위에 표시
+      cursor: pointer;
+      
+      &:hover {
+        color: #FF5912;
+        transition: color 0.3s ease;
+      }
+    }
   }
 }
 

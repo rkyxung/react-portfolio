@@ -59,7 +59,7 @@
     transition: transform 0.35s ease-in-out;
   }
   
-  // 햄버거 버튼 호버 시 버튼과 패널이 함께 살짝 들어오게
+  // 햄버거 버튼/섹션 호버 시 버튼과 패널이 함께 살짝 들어오게
   .hamBtn:not(.hamBtn__open):hover {
     transform: translateX(-2.45vw);
   }
@@ -67,6 +67,17 @@
   .hamBtn:not(.hamBtn__open):hover + .hamPanel {
     // 100%에서 90%로 살짝만 들어오도록 (보이는 폭 조절 가능)
     transform: translateX(90%);
+  }
+
+  // 섹션(.hambuger) 전체에 마우스를 올려도 동일한 호버 효과 적용
+  &:hover {
+    .hamBtn:not(.hamBtn__open) {
+      transform: translateX(-2.45vw);
+    }
+
+    .hamPanel:not(.hamPanel__open) {
+      transform: translateX(90%);
+    }
   }
   
   .hamPanel__open {
