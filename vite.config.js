@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   // GitHub Pages 배포 시 레포 이름에 맞춰 base 경로 설정
   // https://rkyxung.github.io/zero/ → "/zero/"
-  base: "/zero/",
+  base: "/zero",
 
 })

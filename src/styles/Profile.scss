@@ -160,7 +160,7 @@
         .skill-section-left {
             width: 50vw;
             height: 100vh;
-            padding: 80vh 4vw;
+            padding: 0 4vw;
             position: relative;
             will-change: transform; // 패럴랙스 성능 최적화
             display: flex;
@@ -194,6 +194,30 @@
                         transition: all 0.3s ease;
                         padding: 1vw;
                         border-radius: 1vw;
+
+                        // FRONT: 앞줄 4개, 뒷줄 3개 - 4번째 아이템 다음에 줄바꿈
+                        .front-group & {
+                            &:nth-child(4) {
+                                flex-basis: 100%;
+                                width: 0;
+                                height: 0;
+                                padding: 0;
+                                margin: 0;
+                                overflow: hidden;
+                            }
+                        }
+
+                        // TOOL: 앞줄 2개, 뒷줄 3개 - 2번째 아이템 다음에 줄바꿈
+                        .tool-group & {
+                            &:nth-child(2) {
+                                flex-basis: 100%;
+                                width: 0;
+                                height: 0;
+                                padding: 0;
+                                margin: 0;
+                                overflow: hidden;
+                            }
+                        }
 
                         &:hover {
                             transform: scale(1.1);

@@ -39,6 +39,9 @@ function Profile() {
     "사용자의 시선을 사로잡는 순간을 만드는"
   ];
 
+  // 정적 자산 base 경로 (base가 /zero 인 경우를 포함)
+  const assetBase = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
+
   // 스킬 이름을 이미지 파일명으로 매핑하는 함수
   const getSkillImage = (skillName) => {
     const imageMap = {
@@ -414,13 +417,15 @@ function Profile() {
         2003.07.19
       </div>
       <div className="profile-img">
-        <img src='./img/profile.png' alt="Profile" />
+        <img src={`${assetBase}img/profile.png`} alt="Profile" />
       </div>
       <div 
         className="resume"
         onClick={async () => {
           try {
-            const response = await fetch('/22461010_김가영_이력서.pdf');
+            const pdfUrl = `${assetBase}22461010_김가영_이력서.pdf`; // base 대응
+            const response = await fetch(pdfUrl);
+            if (!response.ok) throw new Error(`PDF not found: ${response.status}`);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -486,7 +491,7 @@ function Profile() {
                   >
                     <div className="skill-icon">
                       {imageName ? (
-                        <img src={`./img/skills/${imageName}`} alt={skill.name} />
+                        <img src={`${assetBase}img/skills/${imageName}`} alt={skill.name} />
                       ) : (
                         skill.name.charAt(0)
                       )}
@@ -516,7 +521,7 @@ function Profile() {
                   >
                     <div className="skill-icon">
                       {imageName ? (
-                        <img src={`./img/skills/${imageName}`} alt={skill.name} />
+                        <img src={`${assetBase}img/skills/${imageName}`} alt={skill.name} />
                       ) : (
                         skill.name.charAt(0)
                       )}
@@ -546,7 +551,7 @@ function Profile() {
                   >
                     <div className="skill-icon">
                       {imageName ? (
-                        <img src={`./img/skills/${imageName}`} alt={skill.name} />
+                        <img src={`${assetBase}img/skills/${imageName}`} alt={skill.name} />
                       ) : (
                         skill.name.charAt(0)
                       )}
