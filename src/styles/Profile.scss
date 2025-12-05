@@ -12,7 +12,9 @@
   .profile-container {
     width: 100vw;
     height: 100vh;
+    background-color: #191718;
     position: relative;
+    z-index: 2;
 
     .name {
         padding: 8vh 4vw 0;
@@ -59,22 +61,12 @@
         &:hover {
             background-color: #FF5912;
             border-color: #FF5912;
-    
-            svg {
-                path {
-                    fill: #FF5912;
-                }
-            }
         }
     
         svg { 
             margin-left: 0.2vw;
             width: 0.8vw;
             height: auto;
-            
-            path {
-                transition: fill 0.3s ease;
-            }
         }
       }
     
@@ -127,34 +119,72 @@
       }
     }
 
-    .skills {
+    .skill-section-right-fixed {
+        width: 50vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 4vw;
+        z-index: 1; // 최상위에 고정
+
+        .skill-name {
+            @include unbounded-semibold;
+            font-size: 4vw;
+            color: #FF5912;
+            margin-bottom: 2vh;
+            text-align: center;
+        }
+
+        .skill-description {
+            @include pretendard-medium;
+            font-size: 1.5vw;
+            color: #EFF0F1;
+            text-align: center;
+            line-height: 1.8;
+            max-width: 40vw;
+        }
+    }
+
+    .skill-section {
         width: 100vw;
         height: 100vh;
         position: relative;
         display: flex;
         overflow: hidden;
 
-        .skills-left {
+        .skill-section-left {
             width: 50vw;
-            height: auto;
-            padding: 10vh 4vw;
+            height: 100vh;
+            padding: 80vh 4vw;
             position: relative;
             will-change: transform; // 패럴랙스 성능 최적화
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             .skill-group {
-                margin-bottom: 8vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
 
                 .skill-group-title {
                     @include unbounded-semibold;
                     font-size: 3vw;
                     color: #EFF0F1;
                     margin-bottom: 3vh;
+                    text-align: center;
                 }
 
                 .skill-items {
                     display: flex;
                     flex-wrap: wrap;
                     gap: 2vw;
+                    justify-content: center;
 
                     .skill-item {
                         display: flex;
@@ -170,19 +200,14 @@
                         }
 
                         &.active {
-                            .skill-icon {
-                                background-color: #FF5912;
-                            }
                             .skill-label {
                                 color: #FF5912;
                             }
                         }
 
                         .skill-icon {
-                            width: 4vw;
+                            width: auto;
                             height: 4vw;
-                            border-radius: 50%;
-                            background-color: #EFF0F1;
                             display: flex;
                             align-items: center;
                             justify-content: center;
@@ -191,6 +216,13 @@
                             color: #191718;
                             margin-bottom: 0.5vw;
                             transition: all 0.3s ease;
+
+                            img {
+                                width: auto;
+                                height: 100%;
+                                object-fit: contain;
+                                display: block;
+                            }
                         }
 
                         .skill-label {
@@ -204,7 +236,7 @@
             }
         }
 
-        .skills-right {
+        .skill-section-right {
             width: 50vw;
             height: 100vh;
             position: sticky;
@@ -215,6 +247,7 @@
             justify-content: center;
             align-items: center;
             padding: 0 4vw;
+            z-index: 10; // 우측이 위에 오도록
 
             .skill-name {
                 @include unbounded-semibold;

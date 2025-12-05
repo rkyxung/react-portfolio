@@ -9,13 +9,22 @@ gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 function Profile() {
   // 스크롤 스냅 관련
   const profileContainerRef = useRef(null);
-  const skillsRef = useRef(null);
+  const frontSectionRef = useRef(null);
+  const backSectionRef = useRef(null);
+  const toolSectionRef = useRef(null);
   const isScrollingRef = useRef(false);
+  const [currentSection, setCurrentSection] = useState(0); // 0: profile, 1: front, 2: back, 3: tool
   
   // 스킬 관련
   const [selectedSkill, setSelectedSkill] = useState(null);
   const skillsLeftRef = useRef(null);
   const skillsRightRef = useRef(null);
+  const skillNameRef = useRef(null);
+  const skillDescriptionRef = useRef(null);
+  const [scrambledText, setScrambledText] = useState('');
+  const [descriptionOpacity, setDescriptionOpacity] = useState(1);
+  const [isFadingIn, setIsFadingIn] = useState(false);
+  const skillsContainerRef = useRef(null); // 스킬 섹션 전체 컨테이너
 
   // 1. 타이핑 효과를 위한 상태값 관리
   const [text, setText] = useState('');
@@ -30,6 +39,29 @@ function Profile() {
     "사용자의 시선을 사로잡는 순간을 만드는"
   ];
 
+  // 스킬 이름을 이미지 파일명으로 매핑하는 함수
+  const getSkillImage = (skillName) => {
+    const imageMap = {
+      'HTML5': 'html.svg',
+      'CSS3': 'css.svg',
+      'JavaScript': 'JS.svg',
+      'React': 'react.svg',
+      'Next.js': 'next.svg',
+      'GSAP': 'gsap.svg',
+      'Three.js': 'threeJS.svg',
+      'Node.js': 'nodeJS.svg',
+      'MongoDB': 'mongoDB.svg',
+      'Unity': 'unity.svg',
+      'C#': 'c-script.svg',
+      'Git': 'git.svg',
+      'GitHub': 'github.svg',
+      'Figma': 'figma.svg',
+      'Illustrator': 'illustrator.svg',
+      'Photoshop': 'photoshop.svg'
+    };
+    return imageMap[skillName] || null;
+  };
+
   // 스킬 데이터
   const skillsData = {
     front: [
@@ -37,14 +69,14 @@ function Profile() {
       { name: 'CSS3', description: 'Flexbox, Grid, 애니메이션 등 최신 CSS 기능을 활용한 반응형 레이아웃 구현이 가능합니다.' },
       { name: 'JavaScript', description: 'ES6+ 문법을 활용한 동적 인터랙션과 비동기 처리 구현이 가능합니다.' },
       { name: 'React', description: '컴포넌트 기반 개발과 Hooks를 활용한 상태 관리 및 라이프사이클 관리가 가능합니다.' },
-      { name: 'Node.js', description: '서버 사이드 JavaScript 개발과 RESTful API 구축이 가능합니다.' },
+      { name: 'Next.js', description: 'React 기반 풀스택 프레임워크를 활용한 SSR, SSG 및 API 라우팅 구현이 가능합니다.' },
       { name: 'GSAP', description: '고급 애니메이션과 스크롤 트리거를 활용한 인터랙티브 웹 구현이 가능합니다.' },
       { name: 'Three.js', description: 'WebGL을 활용한 3D 그래픽과 인터랙티브 3D 경험 구현이 가능합니다.' }
     ],
     back: [
-      { name: 'JavaScript', description: 'Node.js 환경에서 서버 사이드 로직 구현이 가능합니다.' },
-      { name: 'Spring', description: 'Spring Framework를 활용한 백엔드 API 개발이 가능합니다.' },
-      { name: 'Database', description: '관계형 데이터베이스 설계 및 쿼리 최적화가 가능합니다.' },
+      { name: 'Node.js', description: '서버 사이드 JavaScript 개발과 RESTful API 구축이 가능합니다.' },
+      { name: 'MongoDB', description: 'NoSQL 데이터베이스 설계 및 쿼리 최적화가 가능합니다.' },
+      { name: 'Unity', description: '게임 엔진을 활용한 3D 게임 개발 및 인터랙티브 콘텐츠 제작이 가능합니다.' },
       { name: 'C#', description: '.NET 환경에서 백엔드 개발이 가능합니다.' }
     ],
     tool: [
@@ -86,7 +118,7 @@ function Profile() {
 
   // 스크롤 감도 및 속도 설정
   const SCROLL_CONFIG = {
-    minScrollDelta: 50,        // 스크롤 감지 최소값 (낮을수록 민감)
+    minScrollDelta: 1,        // 스크롤 감지 최소값 (낮을수록 민감) - 트랙패드 지원
     scrollDuration: 1.2,        // 스크롤 애니메이션 속도 (초) - 낮을수록 빠름
     scrollEase: 'power2.inOut', // 이징 함수: 'power1', 'power2', 'power3', 'power4', 'expo', 'sine' 등
     profileThreshold: 0.3,      // Profile 섹션 감지 임계값 (0~1)
@@ -100,15 +132,21 @@ function Profile() {
 
   // 스크롤 스냅 구현
   useEffect(() => {
-    if (!profileContainerRef.current || !skillsRef.current) return;
+    if (!profileContainerRef.current || !frontSectionRef.current || !backSectionRef.current || !toolSectionRef.current) return;
 
     const handleWheel = (e) => {
-      if (isScrollingRef.current) return; // 스크롤 중이면 무시
+      // 섹션 스냅 애니메이션이 진행 중일 때는 기본 스크롤 자체를 막아 덜컹거림 방지
+      if (isScrollingRef.current) {
+        e.preventDefault();
+        return;
+      }
       
       const currentScrollY = window.scrollY || window.pageYOffset;
       const windowHeight = window.innerHeight;
       const profileContainerTop = profileContainerRef.current.offsetTop;
-      const skillsTop = skillsRef.current.offsetTop;
+      const frontTop = frontSectionRef.current.offsetTop;
+      const backTop = backSectionRef.current.offsetTop;
+      const toolTop = toolSectionRef.current.offsetTop;
       
       // 스크롤 방향 감지
       const scrollDelta = e.deltaY;
@@ -123,24 +161,85 @@ function Profile() {
       
       // 현재 위치 확인
       const isAtProfileContainer = currentScrollY < profileContainerTop + windowHeight * SCROLL_CONFIG.profileThreshold;
-      const isAtSkills = currentScrollY >= profileContainerTop + windowHeight * SCROLL_CONFIG.skillsThreshold;
+      const isAtFront = currentScrollY >= profileContainerTop + windowHeight * SCROLL_CONFIG.skillsThreshold && 
+                        currentScrollY < frontTop + windowHeight * 0.5;
+      const isAtBack = currentScrollY >= frontTop + windowHeight * 0.5 && 
+                       currentScrollY < backTop + windowHeight * 0.5;
+      const isAtTool = currentScrollY >= backTop + windowHeight * 0.5;
       
       // 스크롤 방향에 따라 섹션 이동
       if (isScrollingDown && isAtProfileContainer) {
-        // 아래로 스크롤하고 Profile Container에 있으면 Skills로 이동
+        // 아래로 스크롤하고 Profile Container에 있으면 FRONT로 이동
         e.preventDefault();
         isScrollingRef.current = true;
         
         gsap.to(window, {
-          scrollTo: { y: skillsTop, autoKill: false },
+          scrollTo: { y: frontTop, autoKill: false },
           duration: SCROLL_CONFIG.scrollDuration,
           ease: SCROLL_CONFIG.scrollEase,
           onComplete: () => {
             isScrollingRef.current = false;
+            setCurrentSection(1);
           }
         });
-      } else if (isScrollingUp && isAtSkills) {
-        // 위로 스크롤하고 Skills에 있으면 Profile Container로 이동
+      } else if (isScrollingDown && isAtFront) {
+        // 아래로 스크롤하고 FRONT에 있으면 BACK & SUB로 이동
+        e.preventDefault();
+        isScrollingRef.current = true;
+        
+        gsap.to(window, {
+          scrollTo: { y: backTop, autoKill: false },
+          duration: SCROLL_CONFIG.scrollDuration,
+          ease: SCROLL_CONFIG.scrollEase,
+          onComplete: () => {
+            isScrollingRef.current = false;
+            setCurrentSection(2);
+          }
+        });
+      } else if (isScrollingDown && isAtBack) {
+        // 아래로 스크롤하고 BACK & SUB에 있으면 TOOL로 이동
+        e.preventDefault();
+        isScrollingRef.current = true;
+        
+        gsap.to(window, {
+          scrollTo: { y: toolTop, autoKill: false },
+          duration: SCROLL_CONFIG.scrollDuration,
+          ease: SCROLL_CONFIG.scrollEase,
+          onComplete: () => {
+            isScrollingRef.current = false;
+            setCurrentSection(3);
+          }
+        });
+      } else if (isScrollingUp && isAtTool) {
+        // 위로 스크롤하고 TOOL에 있으면 BACK & SUB로 이동
+        e.preventDefault();
+        isScrollingRef.current = true;
+        
+        gsap.to(window, {
+          scrollTo: { y: backTop, autoKill: false },
+          duration: SCROLL_CONFIG.scrollDuration,
+          ease: SCROLL_CONFIG.scrollEase,
+          onComplete: () => {
+            isScrollingRef.current = false;
+            setCurrentSection(2);
+          }
+        });
+      } else if (isScrollingUp && isAtBack) {
+        // 위로 스크롤하고 BACK & SUB에 있으면 FRONT로 이동
+        e.preventDefault();
+        isScrollingRef.current = true;
+        
+        gsap.to(window, {
+          scrollTo: { y: frontTop, autoKill: false },
+          duration: SCROLL_CONFIG.scrollDuration,
+          ease: SCROLL_CONFIG.scrollEase,
+          onComplete: () => {
+            isScrollingRef.current = false;
+            setCurrentSection(1);
+          }
+        });
+      } else if (isScrollingUp && isAtFront) {
+        // 위로 스크롤하고 FRONT에 있으면 Profile Container로 이동
         e.preventDefault();
         isScrollingRef.current = true;
         
@@ -150,6 +249,7 @@ function Profile() {
           ease: SCROLL_CONFIG.scrollEase,
           onComplete: () => {
             isScrollingRef.current = false;
+            setCurrentSection(0);
           }
         });
       }
@@ -163,31 +263,138 @@ function Profile() {
     };
   }, []);
 
-  // 패럴랙스 스크롤 구현 (skills 섹션에서만 작동)
-  useEffect(() => {
-    if (!skillsRef.current || !skillsLeftRef.current) return;
+  // 섹션별 기본 표시(선택 전)
+  const getFallbackSkill = () => {
+    if (currentSection === 1) {
+      return { name: 'FRONT', description: 'HTML, CSS, JavaScript, React, Next.js, GSAP, Three.js 기술 스택을 다룹니다.' };
+    }
+    if (currentSection === 2) {
+      return { name: 'BACK & SUB', description: 'Node.js, MongoDB, Unity, C# 등 백엔드/서브 스택을 다룹니다.' };
+    }
+    if (currentSection === 3) {
+      return { name: 'TOOL', description: 'Git, GitHub, Figma, Illustrator, Photoshop 협업/디자인 도구를 다룹니다.' };
+    }
+    return { name: '', description: '' };
+  };
 
-    const scrollTrigger = ScrollTrigger.create({
-      trigger: skillsRef.current,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1,
-      onUpdate: (self) => {
-        const progress = self.progress;
-        const windowHeight = window.innerHeight;
-        
-        // 좌측을 위로 이동 (패럴랙스 효과)
-        // progress가 0일 때 y: 0, progress가 1일 때 y: -windowHeight * 0.5
-        if (skillsLeftRef.current) {
-          gsap.set(skillsLeftRef.current, {
-            y: -progress * windowHeight * 0.5,
-          });
+  const fallbackSkill = getFallbackSkill();
+  const displaySkill = selectedSkill || fallbackSkill;
+
+  // Text Scramble 효과 구현
+  useEffect(() => {
+    if (!selectedSkill) {
+      setScrambledText('');
+      setDescriptionOpacity(1);
+      return;
+    }
+
+    // 스킬 변경 시 description 즉시 페이드아웃 (transition 없이)
+    setIsFadingIn(false);
+    setDescriptionOpacity(0);
+
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const targetText = selectedSkill.name;
+    let animationFrame;
+    let timeoutId;
+    let currentIndex = 0;
+    let iteration = 0;
+    const maxIterations = 3; // 각 문자당 반복 횟수 (더 줄임)
+
+    const scramble = () => {
+      let result = '';
+      
+      for (let i = 0; i < targetText.length; i++) {
+        if (i < currentIndex) {
+          // 이미 완성된 문자는 그대로 유지
+          result += targetText[i];
+        } else if (i === currentIndex && iteration >= maxIterations * 0.5) {
+          // 현재 인덱스의 문자는 일정 비율 이상 진행되면 실제 문자로 표시
+          result += targetText[i];
+        } else {
+          // 랜덤 문자 표시
+          result += chars[Math.floor(Math.random() * chars.length)];
         }
       }
+
+      setScrambledText(result);
+
+      iteration++;
+      
+      if (iteration >= maxIterations) {
+        // 현재 문자 완성, 다음 문자로 이동
+        currentIndex++;
+        iteration = 0;
+        
+        if (currentIndex >= targetText.length) {
+          // 모든 문자 완성 - 이 시점에 description 페이드인
+          setScrambledText(targetText);
+          
+          // 스크럼블이 끝나면 description 페이드인 (transition 적용)
+          setIsFadingIn(true);
+          requestAnimationFrame(() => {
+            setDescriptionOpacity(1);
+          });
+          return;
+        }
+      }
+
+      timeoutId = setTimeout(() => {
+        animationFrame = requestAnimationFrame(scramble);
+      }, 50); // 속도 느리게 (20ms -> 50ms)
+    };
+
+    // 초기화: 랜덤 문자로 시작
+    currentIndex = 0;
+    iteration = 0;
+    let initialText = '';
+    for (let i = 0; i < targetText.length; i++) {
+      initialText += chars[Math.floor(Math.random() * chars.length)];
+    }
+    setScrambledText(initialText);
+
+    timeoutId = setTimeout(() => {
+      animationFrame = requestAnimationFrame(scramble);
+    }, 50);
+
+    return () => {
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [selectedSkill]);
+
+  // 패럴랙스 스크롤 구현 (각 스킬 섹션에서 작동)
+  useEffect(() => {
+    if (!frontSectionRef.current || !backSectionRef.current || !toolSectionRef.current) return;
+
+    const sections = [
+      { ref: frontSectionRef },
+      { ref: backSectionRef },
+      { ref: toolSectionRef }
+    ];
+
+    const scrollTriggers = sections.map(section => {
+      return ScrollTrigger.create({
+        trigger: section.ref.current,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const windowHeight = window.innerHeight;
+          
+          // 각 섹션의 좌측을 스크롤에 따라 위로 이동 (패럴랙스 효과)
+          const leftElement = section.ref.current?.querySelector('.skill-section-left');
+          if (leftElement) {
+            gsap.set(leftElement, {
+              y: -progress * windowHeight * 0.3,
+            });
+          }
+        }
+      });
     });
 
     return () => {
-      scrollTrigger.kill();
+      scrollTriggers.forEach(trigger => trigger.kill());
     };
   }, []);
 
@@ -207,7 +414,7 @@ function Profile() {
         2003.07.19
       </div>
       <div className="profile-img">
-        <img src="public/img/profile.png" alt="Profile" />
+        <img src='./img/profile.png' alt="Profile" />
       </div>
       <div 
         className="resume"
@@ -240,70 +447,116 @@ function Profile() {
         <div>프론트엔드 개발자 <span>김가영</span>입니다.</div>
       </div>
       </div>
+      
 
-      <div className="skills" ref={skillsRef}>
-        <div className="skills-left" ref={skillsLeftRef}>
+      {/* 고정된 우측 스킬 설명 */}
+      {currentSection > 0 && (
+        <div className="skill-section-right-fixed">
+          <>
+            <h2 className="skill-name" ref={skillNameRef}>
+              {selectedSkill ? (scrambledText || selectedSkill.name) : displaySkill.name}
+            </h2>
+            <p 
+              className="skill-description" 
+              ref={skillDescriptionRef}
+              style={{ 
+                opacity: descriptionOpacity,
+                transition: isFadingIn ? 'opacity 0.5s ease' : 'none'
+              }}
+            >
+              {selectedSkill ? selectedSkill.description : displaySkill.description}
+            </p>
+          </>
+        </div>
+      )}
+
+      {/* FRONT 섹션 */}
+      <div className="skill-section front-section" ref={frontSectionRef}>
+        <div className="skill-section-left">
           <div className="skill-group">
             <h2 className="skill-group-title">FRONT</h2>
             <div className="skill-items">
-              {skillsData.front.map((skill, index) => (
-                <div 
-                  key={index}
-                  className={`skill-item ${selectedSkill?.name === skill.name ? 'active' : ''}`}
-                  onClick={() => setSelectedSkill(skill)}
-                >
-                  <div className="skill-icon">{skill.name.charAt(0)}</div>
-                  <span className="skill-label">{skill.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="skill-group">
-            <h2 className="skill-group-title">BACK & SUB</h2>
-            <div className="skill-items">
-              {skillsData.back.map((skill, index) => (
-                <div 
-                  key={index}
-                  className={`skill-item ${selectedSkill?.name === skill.name ? 'active' : ''}`}
-                  onClick={() => setSelectedSkill(skill)}
-                >
-                  <div className="skill-icon">{skill.name.charAt(0)}</div>
-                  <span className="skill-label">{skill.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="skill-group">
-            <h2 className="skill-group-title">TOOL</h2>
-            <div className="skill-items">
-              {skillsData.tool.map((skill, index) => (
-                <div 
-                  key={index}
-                  className={`skill-item ${selectedSkill?.name === skill.name ? 'active' : ''}`}
-                  onClick={() => setSelectedSkill(skill)}
-                >
-                  <div className="skill-icon">{skill.name.charAt(0)}</div>
-                  <span className="skill-label">{skill.name}</span>
-                </div>
-              ))}
+              {skillsData.front.map((skill, index) => {
+                const imageName = getSkillImage(skill.name);
+                return (
+                  <div 
+                    key={index}
+                    className={`skill-item ${selectedSkill?.name === skill.name ? 'active' : ''}`}
+                    onClick={() => setSelectedSkill(skill)}
+                  >
+                    <div className="skill-icon">
+                      {imageName ? (
+                        <img src={`./img/skills/${imageName}`} alt={skill.name} />
+                      ) : (
+                        skill.name.charAt(0)
+                      )}
+                    </div>
+                    <span className="skill-label">{skill.name}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="skills-right" ref={skillsRightRef}>
-          {selectedSkill ? (
-            <>
-              <h2 className="skill-name">{selectedSkill.name}</h2>
-              <p className="skill-description">{selectedSkill.description}</p>
-            </>
-          ) : (
-            <>
-              <h2 className="skill-name">JAVA Script</h2>
-              <p className="skill-description">구현 가능합니다</p>
-            </>
-          )}
+      {/* BACK & SUB 섹션 */}
+      <div className="skill-section back-section" ref={backSectionRef}>
+        <div className="skill-section-left">
+          <div className="skill-group">
+            <h2 className="skill-group-title">BACK & SUB</h2>
+            <div className="skill-items">
+              {skillsData.back.map((skill, index) => {
+                const imageName = getSkillImage(skill.name);
+                return (
+                  <div 
+                    key={index}
+                    className={`skill-item ${selectedSkill?.name === skill.name ? 'active' : ''}`}
+                    onClick={() => setSelectedSkill(skill)}
+                  >
+                    <div className="skill-icon">
+                      {imageName ? (
+                        <img src={`./img/skills/${imageName}`} alt={skill.name} />
+                      ) : (
+                        skill.name.charAt(0)
+                      )}
+                    </div>
+                    <span className="skill-label">{skill.name}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* TOOL 섹션 */}
+      <div className="skill-section tool-section" ref={toolSectionRef}>
+        <div className="skill-section-left">
+          <div className="skill-group">
+            <h2 className="skill-group-title">TOOL</h2>
+            <div className="skill-items">
+              {skillsData.tool.map((skill, index) => {
+                const imageName = getSkillImage(skill.name);
+                return (
+                  <div 
+                    key={index}
+                    className={`skill-item ${selectedSkill?.name === skill.name ? 'active' : ''}`}
+                    onClick={() => setSelectedSkill(skill)}
+                  >
+                    <div className="skill-icon">
+                      {imageName ? (
+                        <img src={`./img/skills/${imageName}`} alt={skill.name} />
+                      ) : (
+                        skill.name.charAt(0)
+                      )}
+                    </div>
+                    <span className="skill-label">{skill.name}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </div>

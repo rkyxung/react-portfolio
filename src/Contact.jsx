@@ -2,6 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import Matter from 'matter-js';
 import './styles/Contact.scss';
 
+// Matter.js Body 전역 참조 (호버 핸들러에서 사용)
+const Body = Matter.Body;
+
 // 반복되는 SVG 아이콘 컴포넌트
 const SvgIcon = ({ type }) => {
   if (type === 'filled') {
@@ -50,6 +53,36 @@ function Contact() {
   const sceneRef = useRef(null);
   const engineRef = useRef(null);
   const elementRefs = useRef([]); // DOM 요소들을 참조할 배열
+  const bodiesRef = useRef([]);   // Matter.js 바디들을 참조할 배열
+
+  // CONTACT 정보 클릭 핸들러들
+  const handlePhoneClick = () => {
+    window.location.href = 'tel:01062025991';
+  };
+
+  const handleEmailClick = () => {
+    window.location.href = 'mailto:kimgy071928@gmail.com';
+  };
+
+  const handleGithubClick = () => {
+    window.open('https://github.com/rkyxung', '_blank', 'noopener,noreferrer');
+  };
+
+  // 호버 시 눈에 띄게 튕기도록 속도를 바꿔주는 함수
+  const handleHover = (index) => {
+    const engine = engineRef.current;
+    const bodies = bodiesRef.current;
+    if (!engine || !bodies[index]) return;
+
+    const body = bodies[index];
+    const currentVel = body.velocity;
+
+    // 위쪽으로 확실하게 튕기도록 y 속도를 크게 음수 방향으로 변경
+    Body.setVelocity(body, {
+      x: currentVel.x + (Math.random() - 0.5) * 4, // 좌우로 살짝 퍼지게
+      y: -18,                                      // 위로 강하게 튕김
+    });
+  };
 
   useEffect(() => {
     // 1. Matter.js 엔진 초기화
@@ -57,9 +90,6 @@ function Contact() {
           Render = Matter.Render,
           World = Matter.World,
           Bodies = Matter.Bodies,
-          Body = Matter.Body,
-          Mouse = Matter.Mouse,
-          MouseConstraint = Matter.MouseConstraint,
           Runner = Matter.Runner;
 
     const engine = Engine.create();
@@ -90,7 +120,7 @@ function Contact() {
 
     // 하단 바닥: 화면 하단이 아니라, SCSS에서 .line 이 위치한 높이를 끝지점으로 사용
     // .line 은 bottom: 7vh 이므로, 월드 높이(height)를 기준으로 93% 지점에 라인이 있다고 가정
-    const lineY = height * 0.92; // 라인 위치 (대략)
+    const lineY = height * 0.915; // 라인 위치 (대략)
     const ground = Bodies.rectangle(
       width / 2,
       lineY + wallThickness / 2, // 라인 바로 아래에 바닥을 두어 라인이 끝지점처럼 보이게
@@ -166,23 +196,9 @@ function Contact() {
     });
 
     World.add(engine.world, bodies);
+    bodiesRef.current = bodies;
 
-    // 5. 마우스 인터랙션
-    const mouse = Mouse.create(render.canvas);
-    const mouseConstraint = MouseConstraint.create(engine, {
-      mouse: mouse,
-      constraint: {
-        stiffness: 0.08, // 드래그 감도/탄성 더 약하게
-        render: { visible: false }
-      }
-    });
-    // 스크롤이 차단되지 않도록 이벤트 조정
-    mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
-    mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
-    
-    World.add(engine.world, mouseConstraint);
-
-    // 6. 실행
+    // 5. 실행
     const runner = Runner.create();
     Runner.run(runner, engine);
     Render.run(render);
@@ -228,19 +244,17 @@ function Contact() {
         </svg>
       </div>
 
-      <div className="phone">
+      <div className="phone" onClick={handlePhoneClick}>
         <div>PHONE</div>
         <p>010-6202-5991</p>
       </div>
-      <div className="email">
+      <div className="email" onClick={handleEmailClick}>
         <div>E-mail</div>
         <p>kimgy071928@gmail.com</p>
       </div>
-      <div className="github">
+      <div className="github" onClick={handleGithubClick}>
         <div>GitHub</div>
-        <a href="https://github.com/rkyxung" target="_blank" rel="noreferrer">
-          https://github.com/rkyxung
-        </a>
+        <span>https://github.com/rkyxung</span>
       </div>
 
       {/* 물리 엔진이 적용될 영역 */}
@@ -250,9 +264,10 @@ function Contact() {
             key={obj.id}
             ref={(el) => (elementRefs.current[index] = el)}
             className={`physics-item ${obj.class || ''}`}
+            onMouseEnter={() => handleHover(index)}
             style={{ 
                 position: 'absolute', 
-                pointerEvents: 'none', 
+                pointerEvents: 'auto', 
                 willChange: 'transform' 
             }} 
           >

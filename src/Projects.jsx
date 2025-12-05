@@ -1,4 +1,43 @@
+import './styles/Projects.scss';
+// --- 프로젝트 데이터 ---
+
+// 프로젝트 네비게이션 리스트 (이미지 기준)
+const projectNavList = [
+  { id: 1, title: 'PIVOT TIME!' },
+  { id: 2, title: 'Project H.' },
+  { id: 3, title: '빛결' },
+  { id: 4, title: 'BEYOND THE ABYSS' },
+  { id: 5, title: 'Log!n' },
+  { id: 6, title: 'MEMO :RE' },
+  { id: 7, title: '아트랑' },
+  { id: 8, title: 'Qpid' },
+  { id: 9, title: 'NOL:EUM' },
+  { id: 10, title: 'Pinimo' },
+  { id: 11, title: 'Melt0°C' },
+  { id: 12, title: 'Evidence: Cliker' },
+  { id: 13, title: 'J와P' },
+  { id: 14, title: 'Boutine' },
+  { id: 15, title: 'O.K' },
+  { id: 16, title: '피하몽' },
+  { id: 17, title: '돈쭐' },
+  { id: 18, title: 'COPS' },
+  { id: 19, title: '한올' },
+  { id: 20, title: 'Gyeob' },
+];
+
 const webProjects = [
+  {
+    title: 'PIVOT TIME',
+    period: '2024.12 - 2025.01',
+    role: '팀 프로젝트',
+    summary: '계원예술대학교 디지털미디어디자인과 2025 졸업전시 웹',
+    details: [
+      '전시의 주제인 \'PIVOT\'과 학생들의 열정을 시각적으로 전달하기 위해',
+      '정적인 정보 전달을 넘어 사용자가 직접 참여하고 몰입할 수 있는 인터랙티브 웹을 구현했습니다.',
+    ],
+    stack: ['React', 'Three.js', 'GSAP'],
+    iframeUrl: 'https://drive.google.com/file/d/17hhWN7qUuHmA3TpdEq04hyNf1NhNdLyz/preview?usp=sharing&rm=minimal',
+  },
   {
     title: 'Spike',
     period: '2025.03 - 2025.06',
@@ -11,6 +50,7 @@ const webProjects = [
     ],
     stack: ['HTML', 'CSS', 'JavaScript'],
     link: 'https://rkyxung.github.io/SPIKLE/',
+    iframeUrl: 'https://drive.google.com/file/d/14CQCXaPZc7AHlMCq09ZX18qMufb3rzGy/preview?usp=sharing&rm=minimal',
   },
   {
     title: 'CODE404:System.themepark',
@@ -24,6 +64,7 @@ const webProjects = [
     ],
     stack: ['HTML', 'CSS', 'JavaScript', 'Adobe Photoshop', 'Adobe Illustrator'],
     link: 'https://rkyxung.github.io/CODE404-System.themepark/',
+    iframeUrl: 'https://drive.google.com/file/d/1fSotnI12Q4ZGIxZB41UE6N65BmTBqT9n/preview?usp=sharing&rm=minimal',
   },
   {
     title: 'CLIMB ON',
@@ -37,6 +78,7 @@ const webProjects = [
     ],
     stack: ['HTML', 'CSS', 'JavaScript'],
     link: 'https://rkyxung.github.io/CLIMB-ON/',
+    iframeUrl: 'https://drive.google.com/file/d/1KsrrmxYIgBFaK6VL87ct0W3CKy1JKL6b/preview?usp=sharing&rm=minimal',
   },
   {
     title: 'LUCY',
@@ -50,6 +92,7 @@ const webProjects = [
     ],
     stack: ['HTML', 'CSS'],
     link: 'https://rkyxung.github.io/LUCY/',
+    iframeUrl: 'https://drive.google.com/file/d/162dNeWC1dOtD2hzoHaGrcVEojubCLB3z/preview?usp=sharing&rm=minimal',
   },
 ];
 
@@ -65,6 +108,7 @@ const unityProjects = [
       '조건 분기와 이벤트 트리거를 분리해 오류 발생 구간의 원인을 추적',
     ],
     stack: ['Unity', 'C#'],
+    iframeUrl: 'https://drive.google.com/file/d/1wASq-scSw8Kqxtght0Uwyj_8sBCPWvBQ/preview?usp=sharing&rm=minimal',
   },
   {
     title: "gayoung's space",
@@ -77,6 +121,7 @@ const unityProjects = [
       'VR 시야감을 고려한 카메라 트랜지션 구성',
     ],
     stack: ['Unity', 'C#'],
+    iframeUrl: 'https://drive.google.com/file/d/1dvHx_ytMvkn5hrjRAgX_BiD5CiH1l4Ik/preview?usp=sharing&rm=minimal',
   },
 ];
 
@@ -92,17 +137,19 @@ const designProjects = [
       '컨셉 디자인: 12신 기반 전시관 콘셉트 브랜딩',
     ],
     stack: ['Figma', 'Adobe Photoshop', 'Adobe Illustrator'],
+    iframeUrl: 'https://drive.google.com/file/d/1f1TFzUh8cxaA2Mo2yUhlUrlgQg6vXo2q/preview?usp=sharing&rm=minimal',
   },
   {
     title: '이웃집 토토로 3D',
     period: '2024.09 - 2024.12',
     role: '1인 프로젝트',
-    summary: '지브리 “이웃집 토토로”를 3D 모델링과 영상으로 재해석',
+    summary: '지브리 "이웃집 토토로"를 3D 모델링과 영상으로 재해석',
     details: [
       '3ds Max로 배경과 캐릭터 모델을 제작',
       'Adobe Premiere Pro로 영상 편집 및 음향 작업',
     ],
     stack: ['3ds Max', 'Adobe Premiere Pro'],
+    iframeUrl: 'https://drive.google.com/file/d/1V5GJUN1nrO4R9yfJ2odEqHsGN80r-DyE/preview?usp=sharing&rm=minimal',
   },
   {
     title: 'WALK & STROLL',
@@ -115,55 +162,336 @@ const designProjects = [
       'Adobe Photoshop으로 촬영 컷 편집 및 그래픽 제작',
     ],
     stack: ['Figma', 'Adobe Photoshop'],
+    iframeUrl: 'https://drive.google.com/file/d/1ByYSPZC6ey3gvHJsvZnHiSkr6lu6TO7u/preview?usp=sharing&rm=minimal',
   },
 ];
+import React, { useEffect, useState, useRef } from 'react';
+
+// 모든 프로젝트를 하나의 배열로 합치고, 카테고리와 색상 정보를 추가
+const allProjects = [
+  ...webProjects.map((p) => ({
+    ...p,
+    category: 'WEB / INTERACTIVE',
+    color: '#FF6B6B',
+  })),
+  ...unityProjects.map((p) => ({
+    ...p,
+    category: 'GAME / UNITY',
+    color: '#4ECDC4',
+  })),
+  ...designProjects.map((p) => ({
+    ...p,
+    category: 'DESIGN / VISUAL',
+    color: '#C792EA',
+  })),
+];
+
+// --- Config ---
+// 카드 높이는 CSS의 aspect-ratio로 자동 계산됨 (16:9)
+// 넓이 기준으로 높이 계산: 넓이 * 9 / 16
 
 function Projects() {
-  const renderGroup = (title, list) => (
-    <div className="project-group" key={title}>
-      <h2>{title}</h2>
-      {list.map((project) => (
-        <article key={project.title} className="project-row">
-          <header>
-            <div>
-              <h3>{project.title}</h3>
-              <p>{project.summary}</p>
-            </div>
-            <div className="project-meta">
-              <span>{project.role}</span>
-              <span>{project.period}</span>
-            </div>
-          </header>
-          <ul>
-            {project.details.map((detail) => (
-              <li key={detail}>{detail}</li>
-            ))}
-          </ul>
-          <div className="tag-row">
-            {project.stack.map((tag) => (
-              <span key={tag}>{tag}</span>
-            ))}
-          </div>
-          {project.link && (
-            <a className="project-link" href={project.link} target="_blank" rel="noreferrer">
-              결과 보기
-            </a>
-          )}
-        </article>
-      ))}
-    </div>
-  );
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [targetScroll, setTargetScroll] = useState(0);
+  const [viewMode, setViewMode] = useState('video'); // 'video' or 'code'
+  const requestRef = useRef();
+  const isSnappingRef = useRef(false); // 프로젝트 간 스냅 중인지 여부
+  const cardHeightRef = useRef(52.083); // 기본값 (1000px * 9 / 16 = 562.5px → 52.083vh, 1920x1080 기준)
+  const stageContainerRef = useRef(null);
+
+  // 카드 높이 계산 (16:9 비율)
+  useEffect(() => {
+    const updateCardHeight = () => {
+      if (stageContainerRef.current) {
+        const width = stageContainerRef.current.offsetWidth;
+        // 16:9 비율로 높이 계산 (vh 단위)
+        // 넓이를 vw로 변환한 후 9/16을 곱하면 vh가 됨
+        // 1920px 기준: width(px) / 1920 * 100 = width(vw)
+        // height(vh) = width(vw) * 9 / 16
+        const widthVw = (width / 1920) * 100;
+        cardHeightRef.current = widthVw * 9 / 16; // vh 단위
+      }
+    };
+
+    updateCardHeight();
+    window.addEventListener('resize', updateCardHeight);
+    return () => window.removeEventListener('resize', updateCardHeight);
+  }, []);
+
+  // --- Animation Loop for Smooth Scrolling ---
+  const animate = () => {
+    setScrollProgress(prev => {
+      const diff = targetScroll - prev;
+      if (Math.abs(diff) < 0.001) {
+        // 목표 위치에 정확히 도달하면 정수로 스냅 (밀림 방지)
+        if (isSnappingRef.current) {
+          isSnappingRef.current = false;
+        }
+        // 정수 인덱스로 정확히 스냅
+        return Math.round(targetScroll);
+      }
+      return prev + diff * 0.07; // 애니메이션 속도 조정 (낮을수록 느림)
+    });
+    requestRef.current = requestAnimationFrame(animate);
+  };
+
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(requestRef.current);
+  }, [targetScroll]);
+
+  // 프로젝트 카드가 변경될 때 viewMode를 'video'로 리셋
+  const prevIndexRef = useRef(Math.round(scrollProgress));
+
+  useEffect(() => {
+    const currentIndex = Math.round(scrollProgress);
+    if (prevIndexRef.current !== currentIndex) {
+      // 프로젝트가 변경되었을 때
+      setViewMode('video');
+      prevIndexRef.current = currentIndex;
+    }
+  }, [scrollProgress]);
+
+  const handleWheel = (e) => {
+    e.preventDefault();
+
+    const delta = e.deltaY;
+
+    // 스냅 애니메이션 중이면 추가 입력 무시
+    if (isSnappingRef.current) return;
+
+    // 너무 작은 입력(트랙패드 미세 흔들림)은 무시
+    if (Math.abs(delta) < 5) return;
+
+    const direction = delta > 0 ? 1 : -1; // 아래로 스크롤: 다음 프로젝트, 위로 스크롤: 이전 프로젝트
+
+    // 현재 정확한 인덱스 계산 (scrollProgress 기준으로 정확히 계산)
+    const currentIndex = Math.round(scrollProgress);
+    const nextIndex = Math.max(
+      0,
+      Math.min(allProjects.length - 1, currentIndex + direction)
+    );
+
+    if (nextIndex === currentIndex) return;
+
+    // 다음 프로젝트 인덱스로 정확히 스냅 (정수로 설정)
+    isSnappingRef.current = true;
+    setTargetScroll(nextIndex); // 정수 인덱스로 정확히 설정
+  };
+
+  // --- Calculate Transform based on diagram ---
+  const getCardStyle = (index) => {
+    // offset: 0 = Center, -1 = Top, +1 = Bottom
+    const offset = index - scrollProgress;
+    const absOffset = Math.abs(offset);
+    
+    // Only render visible range
+    if (absOffset > 2) return { display: 'none' };
+
+    // --- Key Logic for Concave Fold Layout (< shape) ---
+    
+    // 1. Rotation:
+    // Top card (offset < 0) should tilt towards user (Top edge Front, Bottom edge Back) -> rotateX(-angle)
+    // Bottom card (offset > 0) should tilt towards user (Top edge Back, Bottom edge Front) -> rotateX(+angle)
+    // Formula: rotateX( offset * 45deg )
+    // -1 -> -45deg (/)
+    // 0 -> 0deg (|)
+    // 1 -> 45deg (\)
+    const rotateX = offset * 45;
+
+    // 2. Y Position:
+    // Linear stacking (vh 단위 사용)
+    const translateY = offset * cardHeightRef.current;
+
+    // 3. Z Position (Convex effect):
+    // Center is closest to user. Edges go further back.
+    // As offset increases, push it backward.
+    // translateZ( -abs(offset) * Depth ) - vw 단위로 변환 (80px → 4.167vw, 1920px 기준)
+    const translateZ = -absOffset * 4.167; 
+
+    // 4. Opacity/Brightness
+    const opacity = 1 - Math.min(absOffset, 1) * 0.5; // Fade out non-center
+    const scale = 1 - Math.min(absOffset, 1) * 0.05; // Slight scale down for depth
+
+    return {
+      transform: `translateY(${translateY}vh) translateZ(${translateZ}vw) rotateX(${rotateX}deg) scale(${scale})`,
+      opacity: Math.max(0, 1 - absOffset * 0.8), // Fade out distant cards
+      zIndex: 100 - Math.round(absOffset * 10),
+      filter: `brightness(${1 - absOffset * 0.6})` // Darken distant cards
+    };
+  };
+
+  const currentIndex = Math.round(scrollProgress);
 
   return (
-    <section className="section projects-section">
-      <header className="section-header">
-        <p className="eyebrow">Projects</p>
-        <h1>웹 · 게임 · 디자인 작업</h1>
-      </header>
-      {renderGroup('Web Development', webProjects)}
-      {renderGroup('Unity / Interactive', unityProjects)}
-      {renderGroup('Design & Visual', designProjects)}
-    </section>
+    <div className="projects-viewport">
+      <div className="viewport" onWheel={handleWheel}>
+        <div className="planes">
+          {/* 중앙면: 기존 카드 스택 */}
+          <section className="plane plane-middle">
+            {/* 왼쪽: 프로젝트 네비게이션 */}
+            <aside className="projects-nav">
+              <ul className="nav-list">
+                {allProjects.map((project, index) => (
+                  <li
+                    key={index}
+                    className={`nav-item ${currentIndex === index ? 'active' : ''}`}
+                    onClick={() => {
+                      if (isSnappingRef.current) return;
+                      isSnappingRef.current = true;
+                      setTargetScroll(index);
+                    }}
+                  >
+                    <span className="nav-number">{String(index + 1).padStart(2, '0')}</span>
+                    <span className="nav-title">{project.title}</span>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+
+            {/* 오른쪽: 프로젝트 설명 */}
+            {allProjects[currentIndex] && (
+              <aside className="projects-info">
+                <div className="info-content">
+                  <div className="info-header">
+                    <h2 className="project-title">{allProjects[currentIndex].title}</h2>
+                  </div>
+                  
+                  <div className="info-meta">
+                    <span className="role">{allProjects[currentIndex].role}</span>
+                    <span className="period">{allProjects[currentIndex].period}</span>
+                  </div>
+
+                  <p className="summary">{allProjects[currentIndex].summary}</p>
+
+                  {allProjects[currentIndex].details && allProjects[currentIndex].details.length > 0 && (
+                    <ul className="details-list">
+                      {allProjects[currentIndex].details.map((detail, idx) => (
+                        <li key={idx}>{detail}</li>
+                      ))}
+                    </ul>
+                  )}
+
+                  <div className="tags">
+                    {allProjects[currentIndex].stack.map((s) => (
+                      <span key={s} className="tag">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+
+                  {allProjects[currentIndex].link && (
+                    <a
+                      href={allProjects[currentIndex].link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="link-button"
+                    >
+                      VIEW PROJECT ↗
+                    </a>
+                  )}
+                </div>
+              </aside>
+            )}
+
+            <div className="mask-overlay"></div>
+            <div className="stage-container" ref={stageContainerRef}>
+              {/* 토글 버튼 */}
+              <div className="view-toggle" onClick={() => setViewMode(viewMode === 'video' ? 'code' : 'video')}>
+                <div className="toggle-track">
+                  <div className={`toggle-slider ${viewMode === 'code' ? 'active' : ''}`}>
+                    {viewMode === 'video' ? (
+                      <svg width="27" height="18" viewBox="0 0 27 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.4218 8.87814C17.626 8.74818 17.626 8.45004 17.4218 8.32008L11.0923 4.29222C10.8721 4.1521 10.584 4.31027 10.584 4.57125V12.627C10.584 12.8879 10.8721 13.0461 11.0923 12.906L17.4218 8.87814Z" stroke="#fff" strokeWidth="1.32296" strokeLinecap="round" strokeLinejoin="round"/>
+                        <rect x="0.661621" y="0.662109" width="25.1362" height="15.8755" rx="1.32296" stroke="#fff" strokeWidth="1.32296" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    ) : (
+                      <svg width="33" height="29" viewBox="0 0 33 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.75 7.75L1 14.5L7.75 21.25M24.625 7.75L31.375 14.5L24.625 21.25M19.5625 1L12.8125 28" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="card-stack">
+                {allProjects.map((project, index) => (
+                  <div
+                    key={index}
+                    className="card"
+                    style={getCardStyle(index)}
+                  >
+                    <div className="card-content">
+                      {/* 모든 iframe을 미리 렌더링하여 로딩 속도 향상 */}
+                      {project.iframeUrl && (
+                        <iframe
+                          key={`${index}-${currentIndex}-${viewMode}`} // 프로젝트 변경 또는 viewMode 변경 시 리마운트하여 비디오 정지
+                          src={viewMode === 'video' && index === currentIndex ? project.iframeUrl : ''} // 보이지 않을 때는 src를 빈 문자열로 설정하여 정지
+                          className={`project-iframe ${viewMode === 'video' && index === currentIndex ? 'visible' : 'hidden'}`}
+                          allow="autoplay; fullscreen; picture-in-picture"
+                          allowFullScreen
+                          frameBorder="0"
+                          loading="lazy"
+                        />
+                      )}
+                      {/* viewMode에 따라 비디오 또는 코드 리뷰 표시 */}
+                      {viewMode === 'video' ? (
+                        !project.iframeUrl ? (
+                          <div className="no-video-message">
+                            <p>비디오가 없습니다</p>
+                          </div>
+                        ) : null
+                      ) : (
+                        <>
+                          <div
+                            className="visual-part"
+                            style={{
+                              background: `linear-gradient(135deg, #111, ${project.color} 400%)`,
+                            }}
+                          >
+                            <span className="visual-bg-text">
+                              {project.title.substring(0, 3)}
+                            </span>
+                            <h2>{project.title}</h2>
+                          </div>
+
+                          <div className="info-part">
+                            <div className="info-header">
+                              <span className="role">{project.role}</span>
+                              <span className="period">{project.period}</span>
+                            </div>
+
+                            <p className="summary">{project.summary}</p>
+
+                            <div className="tags">
+                              {project.stack.map((s) => (
+                                <span key={s} className="tag">
+                                  {s}
+                                </span>
+                              ))}
+                            </div>
+
+                            {project.link && (
+                              <a
+                                href={project.link}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="link-icon"
+                              >
+                                ↗
+                              </a>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
   );
 }
 

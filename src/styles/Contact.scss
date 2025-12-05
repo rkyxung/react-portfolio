@@ -11,6 +11,8 @@
   position: relative; // 중요: 물리 엔진 씬의 기준점이 됩니다
 
   .contact-zero {
+    position: relative;
+    z-index: 2; // 물리 레이어보다 위에서 고정 표시
     padding: 8vh 0 5.47vh;
 
     svg {
@@ -21,25 +23,30 @@
   .phone,
   .email,
   .github {
-    font-size: 2.08vw;
+    font-size: 1.5vw;
     letter-spacing: -0.05em;
     position: relative; // z-index가 먹도록 기준 설정
     z-index: 2;         // 물리 캔버스보다 위에 오게
+    cursor: pointer;    // 전체 영역이 클릭 가능함을 표시
 
     p {
-        margin: 0;
+        margin: 1vh 0;
+        letter-spacing: 0;
     }
 
     a {
       text-decoration: none;
       color: #EFF0F1;
-    
-    &:hover {
-      color: #FF5912;
-      transition: all 0.3s ease;
     }
 
-    }
+    &:hover {
+        color: #FF5912;
+        transition: all 0.3s ease;
+      }
+  }
+
+  .github div {
+    margin-bottom: 1vh;
   }
 
   .phone, .email {
@@ -47,19 +54,21 @@
   }
 
   // 물리 엔진 씬 (캔버스 & 아이템 컨테이너)
-  // - 화면 전체에서 자유롭게 떨어지고 튕기도록 전체 뷰포트를 덮는 레이어
+  // - 상단 CONTACT / PHONE / E-mail / GitHub 영역과 완전히 분리해서
+  //   오른쪽 하단 일부에서만 자유롭게 움직이도록 제한
   .physics-scene {
     position: absolute;
     top: 0;
     left: 0;
     width: 100dvw;
     height: 100dvh;
-    z-index: 1; // 배경 위, 텍스트(.phone/.email/.github) 아래
+    z-index: 0; // 배경 위, 나머지 텍스트/요소들(.contact-zero, .phone 등) 뒤
     pointer-events: auto;
     overflow: hidden;
 
     canvas {
       display: block; // Matter.js 캔버스
+      pointer-events: none; // 캔버스가 마우스 이벤트를 가로채지 않도록
     }
   }
 
@@ -106,5 +115,6 @@
     width: 100vw;
     height: 0.15vw;
     background-color: #FF5912;
+    z-index: 2; // 물리 레이어 위에 놓이게
   }
 }

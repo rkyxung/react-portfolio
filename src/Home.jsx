@@ -110,8 +110,8 @@ function Home() {
 
   // 스크롤 감도 및 속도 설정
   const SCROLL_CONFIG = {
-    minScrollDelta: 50,        // 스크롤 감지 최소값 (낮을수록 민감)
-    scrollDuration: 1.2,        // 스크롤 애니메이션 속도 (초) - 낮을수록 빠름
+    minScrollDelta: 1,        // 스크롤 감지 최소값 (낮을수록 민감)
+    scrollDuration: 1.3,        // 스크롤 애니메이션 속도 (초) - 낮을수록 빠름
     scrollEase: 'power2.inOut', // 이징 함수: 'power1', 'power2', 'power3', 'power4', 'expo', 'sine' 등
     heroThreshold: 0.3,         // Hero 섹션 감지 임계값 (0~1)
     aboutThreshold: 0.7,        // About 섹션 감지 임계값 (0~1)
@@ -135,7 +135,11 @@ function Home() {
     if (!heroRef.current || !aboutRef.current || !homeProjectRef.current) return;
 
     const handleWheel = (e) => {
-      if (isScrollingRef.current) return; // 스크롤 중이면 무시
+      // 섹션 스냅 애니메이션이 진행 중일 때는 기본 스크롤 자체를 막아 덜컹거림 방지
+      if (isScrollingRef.current) {
+        e.preventDefault();
+        return;
+      }
       
       const currentScrollY = window.scrollY || window.pageYOffset;
       const windowHeight = window.innerHeight;
@@ -327,7 +331,7 @@ function Home() {
     timeline.to(zeroHeroRef.current, {
       x: responsiveValues.zeroFirstX,
       y: responsiveValues.zeroY,
-      duration: 1.0, // 애니메이션 시간 (원하는 값으로 조정)
+      duration: 0.5, // 애니메이션 시간 (원하는 값으로 조정)
       ease: 'power2.out',
     });
     

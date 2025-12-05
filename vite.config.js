@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react-swc'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/react-portfolio/", // 여기에 Repository 경로를 추가
+  // GitHub Pages 배포 시 레포 이름에 맞춰 base 경로 설정
+  // https://rkyxung.github.io/zero/ → "/zero/"
+  base: "/zero/",
 
 })
