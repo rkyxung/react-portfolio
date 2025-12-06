@@ -15,6 +15,7 @@
     background-color: #191718;
     position: relative;
     z-index: 2;
+    
 
     .name {
         padding: 8vh 4vw 0;
@@ -147,6 +148,7 @@
             text-align: center;
             line-height: 1.8;
             max-width: 40vw;
+            white-space: pre-line;
         }
     }
 
@@ -160,7 +162,7 @@
         .skill-section-left {
             width: 50vw;
             height: 100vh;
-            padding: 0 4vw;
+            padding: 80vh 4vw;
             position: relative;
             will-change: transform; // 패럴랙스 성능 최적화
             display: flex;

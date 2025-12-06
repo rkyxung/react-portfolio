@@ -6,7 +6,6 @@ import History from './History.jsx';
 import Projects from './Projects.jsx';
 import Contact from './Contact.jsx';
 import Splash from './Splash.jsx';
-import ParticleZero from './components/ParticleZero.jsx';
 import Nav from './components/nav';
 
 function App() {

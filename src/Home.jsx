@@ -506,7 +506,7 @@ function Home() {
 
           <div 
             className="more-project-btn"
-            onClick={() => navigate('/projects')}
+            onClick={() => navigate('/projects', { state: { project: projects[currentProject].name } })}
             style={{ cursor: 'pointer' }}
           >
             MORE PROJECTS +

@@ -14,6 +14,7 @@ function Profile() {
   const toolSectionRef = useRef(null);
   const isScrollingRef = useRef(false);
   const [currentSection, setCurrentSection] = useState(0); // 0: profile, 1: front, 2: back, 3: tool
+  const currentSectionRef = useRef(0);
   
   // 스킬 관련
   const [selectedSkill, setSelectedSkill] = useState(null);
@@ -46,7 +47,7 @@ function Profile() {
   const getSkillImage = (skillName) => {
     const imageMap = {
       'HTML5': 'html.svg',
-      'CSS3': 'css.svg',
+      'CSS3 / SCSS': 'scss.svg',
       'JavaScript': 'JS.svg',
       'React': 'react.svg',
       'Next.js': 'next.svg',
@@ -68,27 +69,60 @@ function Profile() {
   // 스킬 데이터
   const skillsData = {
     front: [
-      { name: 'HTML5', description: '시맨틱 마크업과 접근성을 고려한 구조화된 HTML 작성이 가능합니다.' },
-      { name: 'CSS3', description: 'Flexbox, Grid, 애니메이션 등 최신 CSS 기능을 활용한 반응형 레이아웃 구현이 가능합니다.' },
-      { name: 'JavaScript', description: 'ES6+ 문법을 활용한 동적 인터랙션과 비동기 처리 구현이 가능합니다.' },
-      { name: 'React', description: '컴포넌트 기반 개발과 Hooks를 활용한 상태 관리 및 라이프사이클 관리가 가능합니다.' },
-      { name: 'Next.js', description: 'React 기반 풀스택 프레임워크를 활용한 SSR, SSG 및 API 라우팅 구현이 가능합니다.' },
-      { name: 'GSAP', description: '고급 애니메이션과 스크롤 트리거를 활용한 인터랙티브 웹 구현이 가능합니다.' },
-      { name: 'Three.js', description: 'WebGL을 활용한 3D 그래픽과 인터랙티브 3D 경험 구현이 가능합니다.' }
+      { 
+        name: 'HTML5', 
+        description: '시맨틱 마크업과 ARIA로 접근성을 갖춘 구조 작성, 반응형 레이아웃과 CSS 애니메이션으로 인터랙티브 UI 설계' 
+      },
+      { 
+        name: 'CSS3 / SCSS', 
+        description: 'SCSS 변수·믹스인으로 모듈화, 플렉스/그리드 기반 반응형, 트랜지션·키프레임을 활용한 UI 동작 구현'
+      },
+      { 
+        name: 'JavaScript', 
+        description: '이벤트 제어, 비동기(Fetch/Promise) 처리, 상태 기반 렌더링으로 동적 인터랙션 구현' 
+      },
+      { 
+        name: 'React', 
+        description: '함수형 컴포넌트/Hooks, 상태 관리(useState/useEffect/context), 라우팅과 재사용 컴포넌트 설계' 
+      },
+      // 이미지는 Next.js, GSAP, Three.js 없음 → 변경 금지
+      { name: 'Next.js', description: '동적 라우팅과 API Routes로 React 프로젝트 구성' },
+      { name: 'GSAP', description: 'ScrollTrigger·Timeline으로 스크롤 연동 인터랙션과 정교한 애니메이션 시퀀스 제작' },
+      { name: 'Three.js', description: '씬/카메라/라이트 구성, 모델 로딩·애니메이션으로 인터랙티브 3D 경험 구현' }
     ],
+    
     back: [
-      { name: 'Node.js', description: '서버 사이드 JavaScript 개발과 RESTful API 구축이 가능합니다.' },
-      { name: 'MongoDB', description: 'NoSQL 데이터베이스 설계 및 쿼리 최적화가 가능합니다.' },
-      { name: 'Unity', description: '게임 엔진을 활용한 3D 게임 개발 및 인터랙티브 콘텐츠 제작이 가능합니다.' },
-      { name: 'C#', description: '.NET 환경에서 백엔드 개발이 가능합니다.' }
+      { name: 'Node.js', description: '간단한 Express 라우팅과 라이브러리 연동, 미들웨어·인증·에러 처리 등 기본 서버 사이드 로직 구성 경험' },
+      { name: 'MongoDB', description: '스키마 정의 후 CRUD(POST/GET/PUT/DELETE) 처리, Mongoose로 기본 ODM 사용' },
+    
+      {
+        name: 'Unity',
+        description: 'Physics/Timeline 활용, 충돌 감지·트리거 이벤트, 카메라/오브젝트 제어로 프로토타입 구현'
+      },
+      {
+        name: 'C#',
+        description: '게임플레이 로직 스크립팅, 상태·이벤트 기반 흐름 제어, 간단한 VR/인터랙션 기능 구현'
+      }
     ],
+    
     tool: [
-      { name: 'Git', description: '버전 관리와 브랜치 전략을 활용한 협업이 가능합니다.' },
-      { name: 'GitHub', description: '원격 저장소 관리와 Pull Request를 통한 코드 리뷰가 가능합니다.' },
-      { name: 'Figma', description: 'UI/UX 디자인과 프로토타이핑이 가능합니다.' },
-      { name: 'Illustrator', description: '벡터 그래픽 디자인과 아이콘 제작이 가능합니다.' },
-      { name: 'Photoshop', description: '이미지 편집과 그래픽 디자인이 가능합니다.' }
-    ]
+      { name: 'Git', description: 'add/commit/push로 버전 관리, 기본 브랜치·PR 사용 경험' },
+      { name: 'GitHub', description: '원격 저장소 관리, 간단한 CI 빌드/배포 트리거 경험' },
+    
+      {
+        name: 'Figma',
+        description: 'UI 설계·프로토타이핑, 오토레이아웃·컴포넌트 라이브러리로 디자인 시스템 정리'
+      },
+      {
+        name: 'Illustrator',
+        description: '벡터 로고·아이콘 등 그래픽 제작 가능'
+      },
+      {
+        name: 'Photoshop',
+        description: '이미지 보정·합성 등 그래픽 제작 가능'
+      }
+    ],
+    
   };
 
   // 3. 타이핑 로직 구현
@@ -133,132 +167,86 @@ function Profile() {
     window.scrollTo(0, 0);
   }, []);
 
+  // currentSection 동기화 (ref)
+  useEffect(() => {
+    currentSectionRef.current = currentSection;
+  }, [currentSection]);
+
+  // 섹션 변경 시 선택 스킬 초기화 + 기본 값으로 표시
+  useEffect(() => {
+    const fallback = getFallbackSkill();
+    setSelectedSkill(null);
+    setScrambledText(fallback.name || '');
+    // 페이드인 초기 상태로 리셋
+    setIsFadingIn(false);
+    setDescriptionOpacity(0);
+    // 다음 프레임에서 페이드인 (느리게 보이도록 약간 지연)
+    setTimeout(() => {
+      setIsFadingIn(true);
+      setDescriptionOpacity(1);
+    }, 80);
+  }, [currentSection]);
+
+  // ... 기존 import 및 설정 유지
+
   // 스크롤 스냅 구현
   useEffect(() => {
     if (!profileContainerRef.current || !frontSectionRef.current || !backSectionRef.current || !toolSectionRef.current) return;
 
     const handleWheel = (e) => {
-      // 섹션 스냅 애니메이션이 진행 중일 때는 기본 스크롤 자체를 막아 덜컹거림 방지
-      if (isScrollingRef.current) {
+      // [수정 포인트 1] 무조건 브라우저의 기본 스크롤 동작부터 막습니다.
+      // 이렇게 해야 아주 작은 휠 움직임에도 브라우저가 멋대로 화면을 움직이지 않습니다.
+      if (e.cancelable) {
         e.preventDefault();
-        return;
       }
-      
-      const currentScrollY = window.scrollY || window.pageYOffset;
-      const windowHeight = window.innerHeight;
-      const profileContainerTop = profileContainerRef.current.offsetTop;
-      const frontTop = frontSectionRef.current.offsetTop;
-      const backTop = backSectionRef.current.offsetTop;
-      const toolTop = toolSectionRef.current.offsetTop;
-      
-      // 스크롤 방향 감지
+
+      // [수정 포인트 2] 애니메이션 중이면 함수 종료 (이미 preventDefault는 위에서 했음)
+      if (isScrollingRef.current) return;
+
       const scrollDelta = e.deltaY;
       
-      // 최소 스크롤 감도 체크 (너무 작은 움직임은 무시)
+      // [수정 포인트 3] 감도 체크: 감도 미만이면 '동작'만 안 할 뿐, 스크롤은 이미 위에서 막혀있음 -> 화면 고정됨
       if (Math.abs(scrollDelta) < SCROLL_CONFIG.minScrollDelta) {
         return;
       }
-      
-      const isScrollingDown = scrollDelta > 0;
-      const isScrollingUp = scrollDelta < 0;
-      
-      // 현재 위치 확인
-      const isAtProfileContainer = currentScrollY < profileContainerTop + windowHeight * SCROLL_CONFIG.profileThreshold;
-      const isAtFront = currentScrollY >= profileContainerTop + windowHeight * SCROLL_CONFIG.skillsThreshold && 
-                        currentScrollY < frontTop + windowHeight * 0.5;
-      const isAtBack = currentScrollY >= frontTop + windowHeight * 0.5 && 
-                       currentScrollY < backTop + windowHeight * 0.5;
-      const isAtTool = currentScrollY >= backTop + windowHeight * 0.5;
-      
-      // 스크롤 방향에 따라 섹션 이동
-      if (isScrollingDown && isAtProfileContainer) {
-        // 아래로 스크롤하고 Profile Container에 있으면 FRONT로 이동
-        e.preventDefault();
-        isScrollingRef.current = true;
-        
-        gsap.to(window, {
-          scrollTo: { y: frontTop, autoKill: false },
-          duration: SCROLL_CONFIG.scrollDuration,
-          ease: SCROLL_CONFIG.scrollEase,
-          onComplete: () => {
-            isScrollingRef.current = false;
-            setCurrentSection(1);
-          }
-        });
-      } else if (isScrollingDown && isAtFront) {
-        // 아래로 스크롤하고 FRONT에 있으면 BACK & SUB로 이동
-        e.preventDefault();
-        isScrollingRef.current = true;
-        
-        gsap.to(window, {
-          scrollTo: { y: backTop, autoKill: false },
-          duration: SCROLL_CONFIG.scrollDuration,
-          ease: SCROLL_CONFIG.scrollEase,
-          onComplete: () => {
-            isScrollingRef.current = false;
-            setCurrentSection(2);
-          }
-        });
-      } else if (isScrollingDown && isAtBack) {
-        // 아래로 스크롤하고 BACK & SUB에 있으면 TOOL로 이동
-        e.preventDefault();
-        isScrollingRef.current = true;
-        
-        gsap.to(window, {
-          scrollTo: { y: toolTop, autoKill: false },
-          duration: SCROLL_CONFIG.scrollDuration,
-          ease: SCROLL_CONFIG.scrollEase,
-          onComplete: () => {
-            isScrollingRef.current = false;
-            setCurrentSection(3);
-          }
-        });
-      } else if (isScrollingUp && isAtTool) {
-        // 위로 스크롤하고 TOOL에 있으면 BACK & SUB로 이동
-        e.preventDefault();
-        isScrollingRef.current = true;
-        
-        gsap.to(window, {
-          scrollTo: { y: backTop, autoKill: false },
-          duration: SCROLL_CONFIG.scrollDuration,
-          ease: SCROLL_CONFIG.scrollEase,
-          onComplete: () => {
-            isScrollingRef.current = false;
-            setCurrentSection(2);
-          }
-        });
-      } else if (isScrollingUp && isAtBack) {
-        // 위로 스크롤하고 BACK & SUB에 있으면 FRONT로 이동
-        e.preventDefault();
-        isScrollingRef.current = true;
-        
-        gsap.to(window, {
-          scrollTo: { y: frontTop, autoKill: false },
-          duration: SCROLL_CONFIG.scrollDuration,
-          ease: SCROLL_CONFIG.scrollEase,
-          onComplete: () => {
-            isScrollingRef.current = false;
-            setCurrentSection(1);
-          }
-        });
-      } else if (isScrollingUp && isAtFront) {
-        // 위로 스크롤하고 FRONT에 있으면 Profile Container로 이동
-        e.preventDefault();
-        isScrollingRef.current = true;
-        
-        gsap.to(window, {
-          scrollTo: { y: profileContainerTop, autoKill: false },
-          duration: SCROLL_CONFIG.scrollDuration,
-          ease: SCROLL_CONFIG.scrollEase,
-          onComplete: () => {
-            isScrollingRef.current = false;
-            setCurrentSection(0);
-          }
-        });
-      }
+
+      // 모든 섹션 위치 배열
+      const positions = [
+        profileContainerRef.current.offsetTop,
+        frontSectionRef.current.offsetTop,
+        backSectionRef.current.offsetTop,
+        toolSectionRef.current.offsetTop
+      ];
+
+      // 현재 섹션 인덱스는 상태 ref 기준으로만 계산 (가장 가까운 섹션 탐색 없음)
+      const currentIdx = currentSectionRef.current;
+      const direction = scrollDelta > 0 ? 1 : -1;
+      const nextIdx = Math.min(Math.max(currentIdx + direction, 0), positions.length - 1);
+
+      // 이미 해당 섹션이면 아무것도 안 함
+      if (nextIdx === currentIdx) return;
+
+      // 진행 중 애니메이션 중단 후 한 번만 스냅
+      gsap.killTweensOf(window);
+      isScrollingRef.current = true;
+
+      // 스냅 동안 패럴랙스 ScrollTrigger 비활성화
+      const triggers = ScrollTrigger.getAll();
+      triggers.forEach((t) => t.disable());
+
+      gsap.to(window, {
+        scrollTo: { y: positions[nextIdx], autoKill: false },
+        duration: SCROLL_CONFIG.scrollDuration,
+        ease: SCROLL_CONFIG.scrollEase,
+        onComplete: () => {
+          isScrollingRef.current = false;
+          setCurrentSection(nextIdx);
+          triggers.forEach((t) => t.enable());
+        }
+      });
     };
 
-    // 이벤트 리스너 등록
+    // 이벤트 리스너 등록 (passive: false 필수)
     window.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
@@ -266,16 +254,17 @@ function Profile() {
     };
   }, []);
 
+  
   // 섹션별 기본 표시(선택 전)
   const getFallbackSkill = () => {
     if (currentSection === 1) {
-      return { name: 'FRONT', description: 'HTML, CSS, JavaScript, React, Next.js, GSAP, Three.js 기술 스택을 다룹니다.' };
+      return { name: 'FRONT', description: 'HTML, CSS, JavaScript, React, Next.js, GSAP, Three.js \n프론트 스택을 다룹니다.' };
     }
     if (currentSection === 2) {
-      return { name: 'BACK & SUB', description: 'Node.js, MongoDB, Unity, C# 등 백엔드/서브 스택을 다룹니다.' };
+      return { name: 'BACK & SUB', description: 'Node.js, MongoDB, Unity, C# 등 \n백엔드/서브 스택을 다룹니다.' };
     }
     if (currentSection === 3) {
-      return { name: 'TOOL', description: 'Git, GitHub, Figma, Illustrator, Photoshop 협업/디자인 도구를 다룹니다.' };
+      return { name: 'TOOL', description: 'Git, GitHub, Figma, Illustrator, Photoshop \n협업/디자인 도구를 다룹니다.' };
     }
     return { name: '', description: '' };
   };
